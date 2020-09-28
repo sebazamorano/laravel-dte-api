@@ -1,0 +1,216 @@
+@page {
+    margin: 0; /* <any of the usual CSS values for margins> */
+    /*(% of page-box width for LR, of height for TB) */
+    margin-header: 0; /* <any of the usual CSS values for margins> */
+    margin-footer: 0; /* <any of the usual CSS values for margins> */
+    marks: none
+}
+
+
+body{}
+
+.TipoDTE{
+    font-size:10pt;
+    font-family:Arial,Helvetica;
+    font-weight:bold;
+    color:red;
+    text-align:center;
+}
+
+.Folio{
+    font-size:10pt;
+    font-family:Arial,Helvetica;
+    font-weight:bold;
+    color:red;
+    text-align:center;
+}
+
+.recuadroFolio{
+    height:2.3cm;
+    width:5.5cm;
+    padding:0.5cm 0 0.5cm 0;
+    border-color:red;
+    border-style:solid;
+    border-width:0.5mm;
+    float:right;
+}
+
+.headerDerecha{
+    width:6.23cm;
+    float:left;
+}
+
+.recuadroUnidadSII{
+    clear:both;
+    float:right;
+    width:5.5cm;
+    margin-top:1mm;
+}
+
+.unidadSII{
+    font-size:10pt;
+    font-family:Arial,Helvetica;
+    font-weight:bold;
+    color:red;
+    text-align:center;
+}
+
+.header{
+    width:19.5cm;
+    height:4.5cm;
+}
+
+.RznSocActeco{
+    width:13.2cm;
+    float:left;
+}
+
+.casaMatriz{
+    width:13.2cm;
+    float:left;
+}
+
+.spanCasaMatriz{
+    font-size:9pt; font-family:Arial,Helvetica;
+    color:black; text-align:left;
+}
+
+.contenedorLogotipo{
+    width:140px;
+    float:left;
+}
+
+.hojaCarta{
+    height:20.9cm;
+    padding-top:1cm;
+    padding-left:1cm;
+    padding-right:1cm;
+}
+
+#contenedorFechaEmision{
+    float:right;
+    width:5.7cm;
+}
+
+#fechaEmision{
+    font-size:9pt; font-family:Arial,Helvetica;
+    color:black; text-align:right;
+}
+
+#contenedorReceptor{
+    float:left;clear:both;
+}
+
+#contenedorDReceptor{
+    font-size:7pt; font-family:Arial,Helvetica;
+    color:black; text-align:left;
+}
+
+.items{
+    text-align:left;
+}
+
+.centrado{
+    text-align:center;
+}
+
+.izquierda{
+    text-align:left;
+}
+
+.itemsVacio{
+    text-align:center;
+}
+
+#listaDetalle table{
+    border-collapse:collapse;
+}
+
+#tablaDetalle{
+    margin-top: 0.5cm;
+    border:0.5pt solid black;
+}
+
+#tablaDetalle td{
+    border-right:0.5pt solid black;
+//padding-right:2mm;
+}
+
+#listaImpAdic table{
+    border-collapse:collapse;
+}
+
+#listaReferencias table{
+    border-collapse:collapse;
+}
+
+#listaBultos table{
+    border-collapse:collapse;
+}
+
+#listaDscRcgGlobal table{
+    border-collapse:collapse;
+}
+
+#tablaReferencias{
+    margin-top: 0.5cm;
+    border:0.5pt solid black;
+}
+
+#tablaReferencias td{
+    border-right:0.5pt solid black;
+    padding-right:2mm;
+    float:left;
+}
+
+#tablaBultos{
+    margin-top: 0.5cm;
+    border:0.5pt solid black;
+}
+
+#tablaBultos td{
+    border-right:0.5pt solid black;
+    padding-right:2mm;
+    float:left;
+}
+
+#tablaDscRcgGlobal{
+    margin-top: 0.5cm;
+    border:0.5pt solid black;
+}
+
+#tablaDscRcgGlobal td{
+    border-right:0.5pt solid black;
+    padding-right:2mm;
+    float:left;
+}
+
+#tablaImpAdic{
+    margin-top: 0.5cm;
+    border:0.5pt solid black;
+}
+
+#tablaImpAdic td{
+    border-right:0.5pt solid black;
+    padding-right:2mm;
+    float:left;
+}
+
+#totales{
+//margin-left:15.5cm;
+    border-collapse:collapse;
+}
+
+#totales td{
+    width:2.5cm;
+    height:0.5cm;
+    text-align:center;
+}
+
+.ted{
+    width:6.0cm;
+    height:6.04cm;
+    padding-left:0.8cm;
+    float:left;
+    text-align:center;
+}

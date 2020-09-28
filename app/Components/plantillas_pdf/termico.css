@@ -1,0 +1,161 @@
+@page {
+    margin: 0; /* <any of the usual CSS values for margins> */
+    /*(% of page-box width for LR, of height for TB) */
+    margin-header: 0; /* <any of the usual CSS values for margins> */
+    margin-footer: 0; /* <any of the usual CSS values for margins> */
+    marks: none
+}
+
+.RutEmis{
+    font-size:10pt;
+    font-family:Arial,Helvetica;
+    font-weight:bold;
+    color:black;
+    text-align:center;
+}
+
+.TipoDTE{
+    font-size:10pt;
+    font-family:Arial,Helvetica;
+    font-weight:bold;
+    color:black;
+    text-align:center;
+}
+
+.Folio{
+    font-size:10pt;
+    font-family:Arial,Helvetica;
+    font-weight:bold;
+    color:black;
+    text-align:center;
+}
+
+.recuadroFolio{
+    padding:0.5cm 0 0.5cm 0;
+    border-color:black;
+    border-style:solid;
+    border-width:0.5mm;
+}
+
+.recuadroTipoDTE{
+    width:7cm;
+}
+.recuadroUnidadSII{
+    width:7cm;
+    margin-top:1mm;
+}
+
+.unidadSII{
+    font-size:10pt;
+    font-family:Arial,Helvetica;
+    font-weight:bold;
+    color:black;
+    text-align:center;
+}
+
+.header{
+    width:7cm;
+    padding-bottom:0.15cm;
+}
+
+.RznSocActeco{
+    width:7cm;
+}
+
+.casaMatriz{
+    width:7cm;
+    float:left;
+}
+
+body{
+    font-size:8pt;
+    font-family:Arial,Helvetica;
+}
+
+.spanCasaMatriz{
+    font-size:8pt; font-family:Arial,Helvetica;
+    color:black; text-align:left;
+}
+
+.contenedorLogotipo{
+    width:7cm;
+    height:auto;
+    margin-top: 0.25cm;
+    min-height: 1.5cm;
+}
+
+.hojaCarta{
+    width:7cm;
+    padding-top:0.5cm;
+    padding-left:0.5cm;
+    padding-right:0.5cm;
+}
+
+#contenedorFechaEmision{
+    width:7cm;
+}
+
+#fechaEmision{
+    font-size:8pt; font-family:Arial,Helvetica;
+    color:black; text-align:left;
+}
+
+#contenedorDReceptor{
+    font-size:9pt; font-family:Arial,Helvetica;
+    color:black; text-align:left;
+}
+
+.items{
+    text-align:left;
+}
+
+.centrado{
+    text-align:center;
+}
+
+.itemsVacio{
+    text-align:center;
+}
+
+#listaDetalle table{
+    border-collapse:collapse;
+}
+
+#tablaDetalle{
+    margin-top: 0.25cm;
+    float:left;
+}
+
+#listaReferencias table{
+    border-collapse:collapse;
+}
+
+#tablaReferencias{
+    margin-top: 0.25cm;
+}
+
+#totales{
+    width:5.5cm;
+    border:none;
+    clear:both;
+    margin-left:1.5cm;
+}
+
+#totales td{
+    height:0.5cm;
+    text-align:right;
+}
+
+.ted{
+    padding-top:0.5cm;
+    width:7cm;
+    text-align:center;
+}
+
+#acuseRecibo tr{
+    padding-top:1cm;
+}
+
+#acuseRecibo td{
+    height:0.5cm;
+}

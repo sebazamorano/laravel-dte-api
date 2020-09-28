@@ -1,0 +1,5 @@
+*
+!public/
+!../../app/Components/schemas/
+!../../app/Components/plantillas_pdf/
+!.gitignore
