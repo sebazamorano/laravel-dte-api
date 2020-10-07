@@ -14,6 +14,7 @@ use App\Models\Empresa;
 use Carbon\Carbon;
 use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -44,6 +45,7 @@ use Illuminate\Support\Str;
  */
 class FolioConsumption extends Model
 {
+    use SoftDeletes;
     const FORMATO_TIMBRE = 'Y-m-d\TH:i:s';
     const TIPO_XML = 6;
     protected $table = 'sii_folios_consumption';
