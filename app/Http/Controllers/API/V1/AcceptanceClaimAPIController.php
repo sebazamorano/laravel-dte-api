@@ -10,8 +10,8 @@ use App\Http\Request\APIRequest;
 use App\Models\SII\AcceptanceClaim;
 use App\Models\SII\DocumentInformation;
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\API\CreateAcceptanceClaimAPIRequest;
-use App\Http\Requests\API\UpdateAcceptanceClaimAPIRequest;
+use App\Http\Request\API\CreateAcceptanceClaimAPIRequest;
+use App\Http\Request\API\UpdateAcceptanceClaimAPIRequest;
 
 /**
  * Class AcceptanceClaimAPIController.

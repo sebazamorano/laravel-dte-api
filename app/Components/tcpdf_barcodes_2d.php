@@ -31,19 +31,23 @@ namespace App\Components;
 // -------------------------------------------------------------------
 //
 // Description : PHP class to creates array representations for
-//               2D barcodes to be used with TCPDF.
+//               2D Barcodes to be used with TCPDF.
 //
 //============================================================+
+use App\Components\Barcodes\datamatrix;
+use App\Components\Barcodes\pdf417;
+use App\Components\Barcodes\qrcode;
+
 /**
  * @file
- * PHP class to creates array representations for 2D barcodes to be used with TCPDF.
+ * PHP class to creates array representations for 2D Barcodes to be used with TCPDF.
  * @author Nicola Asuni
  * @version 1.0.014
  */
 
 /**
  * @class TCPDF2DBarcode
- * PHP class to creates array representations for 2D barcodes to be used with TCPDF (http://www.tcpdf.org).
+ * PHP class to creates array representations for 2D Barcodes to be used with TCPDF (http://www.tcpdf.org).
  * @version 1.0.014
  * @author Nicola Asuni
  */
@@ -57,7 +61,7 @@ class tcpdf_barcodes_2d
 
     /**
      * This is the class constructor.
-     * Return an array representations for 2D barcodes:<ul>
+     * Return an array representations for 2D Barcodes:<ul>
      * <li>$arrcode['code'] code to be printed on text label</li>
      * <li>$arrcode['num_rows'] required number of rows</li>
      * <li>$arrcode['num_cols'] required number of columns</li>
@@ -251,15 +255,15 @@ class tcpdf_barcodes_2d
         $qrtype = strtoupper($mode[0]);
         switch ($qrtype) {
             case 'DATAMATRIX': { // DATAMATRIX (ISO/IEC 16022)
-                require_once dirname(__FILE__).'/barcodes/datamatrix.php';
-                $qrcode = new Datamatrix($code);
+                require_once dirname(__FILE__) . '/Barcodes/datamatrix.php';
+                $qrcode = new datamatrix($code);
                 $this->barcode_array = $qrcode->getBarcodeArray();
                 $this->barcode_array['code'] = $code;
 
                 break;
             }
             case 'PDF417': { // PDF417 (ISO/IEC 15438:2006)
-                require_once dirname(__FILE__).'/barcodes/pdf417.php';
+                require_once dirname(__FILE__) . '/Barcodes/pdf417.php';
                 if (! isset($mode[1]) or ($mode[1] === '')) {
                     $aspectratio = 2; // default aspect ratio (width / height)
                 } else {
@@ -284,18 +288,18 @@ class tcpdf_barcodes_2d
                         }
                     }
                 }
-                $qrcode = new PDF417($code, $ecl, $aspectratio, $macro);
+                $qrcode = new pdf417($code, $ecl, $aspectratio, $macro);
                 $this->barcode_array = $qrcode->getBarcodeArray();
                 $this->barcode_array['code'] = $code;
 
                 break;
             }
             case 'QRCODE': { // QR-CODE
-                require_once dirname(__FILE__).'/barcodes/qrcode.php';
+                require_once dirname(__FILE__) . '/Barcodes/qrcode.php';
                 if (! isset($mode[1]) or (! in_array($mode[1], ['L', 'M', 'Q', 'H']))) {
                     $mode[1] = 'L'; // Ddefault: Low error correction
                 }
-                $qrcode = new QRcode($code, strtoupper($mode[1]));
+                $qrcode = new qrcode($code, strtoupper($mode[1]));
                 $this->barcode_array = $qrcode->getBarcodeArray();
                 $this->barcode_array['code'] = $code;
 

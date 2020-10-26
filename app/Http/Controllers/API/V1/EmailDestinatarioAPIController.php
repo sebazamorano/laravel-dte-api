@@ -9,8 +9,8 @@ use App\Http\Controllers\AppBaseController;
 use App\Repositories\Criteria\RequestCriteria;
 use App\Repositories\EmailDestinatarioRepository;
 use App\Repositories\Criteria\LimitOffsetCriteria;
-use App\Http\Requests\API\CreateEmailDestinatarioAPIRequest;
-use App\Http\Requests\API\UpdateEmailDestinatarioAPIRequest;
+use App\Http\Request\API\CreateEmailDestinatarioAPIRequest;
+use App\Http\Request\API\UpdateEmailDestinatarioAPIRequest;
 
 /**
  * Class EmailDestinatarioController.

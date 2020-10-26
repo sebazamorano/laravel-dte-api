@@ -9,8 +9,8 @@ use App\Http\Controllers\AppBaseController;
 use App\Repositories\Criteria\RequestCriteria;
 use App\Repositories\Criteria\LimitOffsetCriteria;
 use App\Repositories\EnvioDteRevisionDetalleRepository;
-use App\Http\Requests\API\CreateEnvioDteRevisionDetalleAPIRequest;
-use App\Http\Requests\API\UpdateEnvioDteRevisionDetalleAPIRequest;
+use App\Http\Request\API\CreateEnvioDteRevisionDetalleAPIRequest;
+use App\Http\Request\API\UpdateEnvioDteRevisionDetalleAPIRequest;
 
 /**
  * Class EnvioDteRevisionDetalleController.

@@ -9,8 +9,8 @@ use App\Http\Controllers\AppBaseController;
 use App\Repositories\DocumentoDetalleRepository;
 use App\Repositories\Criteria\RequestCriteria;
 use App\Repositories\Criteria\LimitOffsetCriteria;
-use App\Http\Requests\API\CreateDocumentoDetalleAPIRequest;
-use App\Http\Requests\API\UpdateDocumentoDetalleAPIRequest;
+use App\Http\Request\API\CreateDocumentoDetalleAPIRequest;
+use App\Http\Request\API\UpdateDocumentoDetalleAPIRequest;
 
 /**
  * Class DocumentoDetalleController.

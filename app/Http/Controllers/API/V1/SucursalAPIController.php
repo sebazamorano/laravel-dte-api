@@ -9,8 +9,8 @@ use Illuminate\Http\Request;
 use App\Http\Request\APIRequest;
 use App\Repositories\SucursalRepository;
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\API\CreateSucursalAPIRequest;
-use App\Http\Requests\API\UpdateSucursalAPIRequest;
+use App\Http\Request\API\CreateSucursalAPIRequest;
+use App\Http\Request\API\UpdateSucursalAPIRequest;
 
 /**
  * Class SucursalController.

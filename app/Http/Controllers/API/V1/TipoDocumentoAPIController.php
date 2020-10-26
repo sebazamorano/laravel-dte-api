@@ -9,8 +9,8 @@ use App\Http\Controllers\AppBaseController;
 use App\Repositories\TipoDocumentoRepository;
 use App\Repositories\Criteria\RequestCriteria;
 use App\Repositories\Criteria\LimitOffsetCriteria;
-use App\Http\Requests\API\CreateTipoDocumentoAPIRequest;
-use App\Http\Requests\API\UpdateTipoDocumentoAPIRequest;
+use App\Http\Request\API\CreateTipoDocumentoAPIRequest;
+use App\Http\Request\API\UpdateTipoDocumentoAPIRequest;
 
 /**
  * Class TipoDocumentoController.

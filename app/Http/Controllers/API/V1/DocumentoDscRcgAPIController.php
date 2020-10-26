@@ -9,8 +9,8 @@ use App\Http\Controllers\AppBaseController;
 use App\Repositories\DocumentoDscRcgRepository;
 use App\Repositories\Criteria\RequestCriteria;
 use App\Repositories\Criteria\LimitOffsetCriteria;
-use App\Http\Requests\API\CreateDocumentoDscRcgAPIRequest;
-use App\Http\Requests\API\UpdateDocumentoDscRcgAPIRequest;
+use App\Http\Request\API\CreateDocumentoDscRcgAPIRequest;
+use App\Http\Request\API\UpdateDocumentoDscRcgAPIRequest;
 
 /**
  * Class DocumentoDscRcgController.

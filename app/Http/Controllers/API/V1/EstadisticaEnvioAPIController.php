@@ -9,8 +9,8 @@ use App\Http\Controllers\AppBaseController;
 use App\Repositories\EstadisticaEnvioRepository;
 use App\Repositories\Criteria\RequestCriteria;
 use App\Repositories\Criteria\LimitOffsetCriteria;
-use App\Http\Requests\API\CreateEstadisticaEnvioAPIRequest;
-use App\Http\Requests\API\UpdateEstadisticaEnvioAPIRequest;
+use App\Http\Request\API\CreateEstadisticaEnvioAPIRequest;
+use App\Http\Request\API\UpdateEstadisticaEnvioAPIRequest;
 
 /**
  * Class EstadisticaEnvioController.

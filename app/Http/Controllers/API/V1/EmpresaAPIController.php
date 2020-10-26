@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\EmpresaResource;
 use App\Repositories\EmpresaRepository;
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\API\CreateEmpresaAPIRequest;
-use App\Http\Requests\API\UpdateEmpresaAPIRequest;
+use App\Http\Request\API\CreateEmpresaAPIRequest;
+use App\Http\Request\API\UpdateEmpresaAPIRequest;
 
 /**
  * Class EmpresaController.

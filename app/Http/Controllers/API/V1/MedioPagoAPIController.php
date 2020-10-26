@@ -9,8 +9,8 @@ use App\Repositories\MedioPagoRepository;
 use App\Http\Controllers\AppBaseController;
 use App\Repositories\Criteria\RequestCriteria;
 use App\Repositories\Criteria\LimitOffsetCriteria;
-use App\Http\Requests\API\CreateMedioPagoAPIRequest;
-use App\Http\Requests\API\UpdateMedioPagoAPIRequest;
+use App\Http\Request\API\CreateMedioPagoAPIRequest;
+use App\Http\Request\API\UpdateMedioPagoAPIRequest;
 
 /**
  * Class MedioPagoController.

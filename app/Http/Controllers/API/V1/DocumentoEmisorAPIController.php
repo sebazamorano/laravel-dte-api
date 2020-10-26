@@ -9,8 +9,8 @@ use App\Http\Controllers\AppBaseController;
 use App\Repositories\DocumentoEmisorRepository;
 use App\Repositories\Criteria\RequestCriteria;
 use App\Repositories\Criteria\LimitOffsetCriteria;
-use App\Http\Requests\API\CreateDocumentoEmisorAPIRequest;
-use App\Http\Requests\API\UpdateDocumentoEmisorAPIRequest;
+use App\Http\Request\API\CreateDocumentoEmisorAPIRequest;
+use App\Http\Request\API\UpdateDocumentoEmisorAPIRequest;
 
 /**
  * Class DocumentoEmisorController.

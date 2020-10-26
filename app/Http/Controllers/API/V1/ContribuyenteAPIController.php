@@ -9,8 +9,8 @@ use App\Http\Controllers\AppBaseController;
 use App\Repositories\ContribuyenteRepository;
 use App\Repositories\Criteria\RequestCriteria;
 use App\Repositories\Criteria\LimitOffsetCriteria;
-use App\Http\Requests\API\CreateContribuyenteAPIRequest;
-use App\Http\Requests\API\UpdateContribuyenteAPIRequest;
+use App\Http\Request\API\CreateContribuyenteAPIRequest;
+use App\Http\Request\API\UpdateContribuyenteAPIRequest;
 
 /**
  * Class ContribuyenteController.

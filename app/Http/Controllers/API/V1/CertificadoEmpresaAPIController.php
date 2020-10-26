@@ -13,8 +13,8 @@ use App\Http\Controllers\AppBaseController;
 use App\Repositories\Criteria\RequestCriteria;
 use App\Repositories\CertificadoEmpresaRepository;
 use App\Repositories\Criteria\LimitOffsetCriteria;
-use App\Http\Requests\API\CreateCertificadoEmpresaAPIRequest;
-use App\Http\Requests\API\UpdateCertificadoEmpresaAPIRequest;
+use App\Http\Request\API\CreateCertificadoEmpresaAPIRequest;
+use App\Http\Request\API\UpdateCertificadoEmpresaAPIRequest;
 
 /**
  * Class CertificadoEmpresaController.

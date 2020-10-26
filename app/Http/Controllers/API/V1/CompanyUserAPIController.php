@@ -11,7 +11,7 @@ use App\Http\Request\APIRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\API\CreateUserAPIRequest;
+use App\Http\Request\API\CreateUserAPIRequest;
 
 /**
  * Class CompanyUserAPIController.

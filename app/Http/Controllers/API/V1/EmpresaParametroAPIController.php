@@ -9,8 +9,8 @@ use App\Http\Controllers\AppBaseController;
 use App\Repositories\EmpresaParametroRepository;
 use App\Repositories\Criteria\RequestCriteria;
 use App\Repositories\Criteria\LimitOffsetCriteria;
-use App\Http\Requests\API\CreateEmpresaParametroAPIRequest;
-use App\Http\Requests\API\UpdateEmpresaParametroAPIRequest;
+use App\Http\Request\API\CreateEmpresaParametroAPIRequest;
+use App\Http\Request\API\UpdateEmpresaParametroAPIRequest;
 
 /**
  * Class EmpresaParametroController.

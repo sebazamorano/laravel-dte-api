@@ -9,8 +9,8 @@ use App\Repositories\ImpuestoRepository;
 use App\Http\Controllers\AppBaseController;
 use App\Repositories\Criteria\RequestCriteria;
 use App\Repositories\Criteria\LimitOffsetCriteria;
-use App\Http\Requests\API\CreateImpuestoAPIRequest;
-use App\Http\Requests\API\UpdateImpuestoAPIRequest;
+use App\Http\Request\API\CreateImpuestoAPIRequest;
+use App\Http\Request\API\UpdateImpuestoAPIRequest;
 
 /**
  * Class ImpuestoController.

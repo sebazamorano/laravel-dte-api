@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 use App\Repositories\ComunaRepository;
 use App\Http\Controllers\AppBaseController;
 use App\Repositories\Criteria\RequestCriteria;
-use App\Http\Requests\API\CreateComunaAPIRequest;
-use App\Http\Requests\API\UpdateComunaAPIRequest;
+use App\Http\Request\API\CreateComunaAPIRequest;
+use App\Http\Request\API\UpdateComunaAPIRequest;
 use App\Repositories\Criteria\LimitOffsetCriteria;
 
 /**

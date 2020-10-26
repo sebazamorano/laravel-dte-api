@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Customer\Mail;
+namespace App\Mail\Customer;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;

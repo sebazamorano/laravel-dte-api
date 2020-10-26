@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\API;
+namespace App\Http\Request\API;
 
 use App\Models\MedioPago;
 use App\Http\Request\APIRequest;

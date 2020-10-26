@@ -7,8 +7,8 @@ use App\Models\Email;
 use Illuminate\Http\Request;
 use App\Repositories\EmailRepository;
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\API\CreateEmailAPIRequest;
-use App\Http\Requests\API\UpdateEmailAPIRequest;
+use App\Http\Request\API\CreateEmailAPIRequest;
+use App\Http\Request\API\UpdateEmailAPIRequest;
 use App\Repositories\Criteria\RequestCriteria;
 use App\Repositories\Criteria\LimitOffsetCriteria;
 

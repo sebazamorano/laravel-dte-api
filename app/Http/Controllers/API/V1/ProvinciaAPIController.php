@@ -9,8 +9,8 @@ use App\Repositories\ProvinciaRepository;
 use App\Http\Controllers\AppBaseController;
 use App\Repositories\Criteria\RequestCriteria;
 use App\Repositories\Criteria\LimitOffsetCriteria;
-use App\Http\Requests\API\CreateProvinciaAPIRequest;
-use App\Http\Requests\API\UpdateProvinciaAPIRequest;
+use App\Http\Request\API\CreateProvinciaAPIRequest;
+use App\Http\Request\API\UpdateProvinciaAPIRequest;
 
 /**
  * Class ProvinciaController.

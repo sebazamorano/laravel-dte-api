@@ -10,8 +10,8 @@ use App\Http\Controllers\AppBaseController;
 use App\Repositories\Criteria\RequestCriteria;
 use App\Repositories\Criteria\LimitOffsetCriteria;
 use App\Repositories\ActividadEconomicaEmpresaRepository;
-use App\Http\Requests\API\CreateActividadEconomicaEmpresaAPIRequest;
-use App\Http\Requests\API\UpdateActividadEconomicaEmpresaAPIRequest;
+use App\Http\Request\API\CreateActividadEconomicaEmpresaAPIRequest;
+use App\Http\Request\API\UpdateActividadEconomicaEmpresaAPIRequest;
 
 /**
  * Class ActividadEconomicaEmpresaController.

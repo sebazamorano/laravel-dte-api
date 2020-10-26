@@ -8,9 +8,9 @@ use App\Models\DetalleRespuestaDteXml;
 use App\Http\Controllers\AppBaseController;
 use App\Repositories\DetalleRespuestaDteXmlRepository;
 use App\Http\Resources\DetalleRespuestaDteXmlCollection;
-use App\Http\Requests\API\CreateDetalleRespuestaDteXmlAPIRequest;
-use App\Http\Requests\API\IndexDetalleRespuestaDteXmlAPIRequests;
-use App\Http\Requests\API\UpdateDetalleRespuestaDteXmlAPIRequest;
+use App\Http\Request\API\CreateDetalleRespuestaDteXmlAPIRequest;
+use App\Http\Request\API\IndexDetalleRespuestaDteXmlAPIRequests;
+use App\Http\Request\API\UpdateDetalleRespuestaDteXmlAPIRequest;
 
 /**
  * Class DetalleRespuestaDteXmlController.

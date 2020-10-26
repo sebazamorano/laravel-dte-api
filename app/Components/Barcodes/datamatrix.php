@@ -34,7 +34,7 @@
 // DataMatrix (ISO/IEC 16022:2006) is a 2-dimensional bar code.
 //============================================================+
 
-namespace App\Components;
+namespace App\Components\Barcodes;
 
 /*
 * @file

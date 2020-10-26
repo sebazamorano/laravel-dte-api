@@ -9,8 +9,8 @@ use App\Http\Controllers\AppBaseController;
 use App\Repositories\DocumentoIddocRepository;
 use App\Repositories\Criteria\RequestCriteria;
 use App\Repositories\Criteria\LimitOffsetCriteria;
-use App\Http\Requests\API\CreateDocumentoIddocAPIRequest;
-use App\Http\Requests\API\UpdateDocumentoIddocAPIRequest;
+use App\Http\Request\API\CreateDocumentoIddocAPIRequest;
+use App\Http\Request\API\UpdateDocumentoIddocAPIRequest;
 
 /**
  * Class DocumentoIddocController.

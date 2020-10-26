@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\DB;
 use App\Repositories\DocumentoRepository;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Resources\DocumentoCollection;
-use App\Http\Requests\API\CreateBoletaAPIRequest;
-use App\Http\Requests\API\CreateDocumentoAPIRequest;
-use App\Http\Requests\API\UpdateDocumentoAPIRequest;
+use App\Http\Request\API\CreateBoletaAPIRequest;
+use App\Http\Request\API\CreateDocumentoAPIRequest;
+use App\Http\Request\API\UpdateDocumentoAPIRequest;
 use App\Http\Resources\Documento as DocumentoResource;
 
 /**

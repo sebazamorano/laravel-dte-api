@@ -9,8 +9,8 @@ use App\Http\Controllers\AppBaseController;
 use App\Repositories\EnvioDteErrorRepository;
 use App\Repositories\Criteria\RequestCriteria;
 use App\Repositories\Criteria\LimitOffsetCriteria;
-use App\Http\Requests\API\CreateEnvioDteErrorAPIRequest;
-use App\Http\Requests\API\UpdateEnvioDteErrorAPIRequest;
+use App\Http\Request\API\CreateEnvioDteErrorAPIRequest;
+use App\Http\Request\API\UpdateEnvioDteErrorAPIRequest;
 
 /**
  * Class EnvioDteErrorController.

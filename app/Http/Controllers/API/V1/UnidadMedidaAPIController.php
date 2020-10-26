@@ -9,8 +9,8 @@ use App\Http\Controllers\AppBaseController;
 use App\Repositories\UnidadMedidaRepository;
 use App\Repositories\Criteria\RequestCriteria;
 use App\Repositories\Criteria\LimitOffsetCriteria;
-use App\Http\Requests\API\CreateUnidadMedidaAPIRequest;
-use App\Http\Requests\API\UpdateUnidadMedidaAPIRequest;
+use App\Http\Request\API\CreateUnidadMedidaAPIRequest;
+use App\Http\Request\API\UpdateUnidadMedidaAPIRequest;
 
 /**
  * Class UnidadMedidaController.

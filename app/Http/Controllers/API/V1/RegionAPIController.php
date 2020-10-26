@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 use App\Repositories\RegionRepository;
 use App\Http\Controllers\AppBaseController;
 use App\Repositories\Criteria\RequestCriteria;
-use App\Http\Requests\API\CreateRegionAPIRequest;
-use App\Http\Requests\API\UpdateRegionAPIRequest;
+use App\Http\Request\API\CreateRegionAPIRequest;
+use App\Http\Request\API\UpdateRegionAPIRequest;
 use App\Repositories\Criteria\LimitOffsetCriteria;
 
 /**

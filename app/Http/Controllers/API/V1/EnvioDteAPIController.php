@@ -9,8 +9,8 @@ use App\Repositories\EnvioDteRepository;
 use App\Http\Controllers\AppBaseController;
 use App\Repositories\Criteria\RequestCriteria;
 use App\Repositories\Criteria\LimitOffsetCriteria;
-use App\Http\Requests\API\CreateEnvioDteAPIRequest;
-use App\Http\Requests\API\UpdateEnvioDteAPIRequest;
+use App\Http\Request\API\CreateEnvioDteAPIRequest;
+use App\Http\Request\API\UpdateEnvioDteAPIRequest;
 
 /**
  * Class EnvioDteController.

@@ -9,8 +9,8 @@ use App\Models\TicketCreditNote;
 use App\Http\Controllers\AppBaseController;
 use App\Repositories\TicketCreditNoteRepository;
 use App\Http\Resources\TicketCreditNoteCollection;
-use App\Http\Requests\API\CreateTicketCreditNoteAPIRequest;
-use App\Http\Requests\API\UpdateTicketCreditNoteAPIRequest;
+use App\Http\Request\API\CreateTicketCreditNoteAPIRequest;
+use App\Http\Request\API\UpdateTicketCreditNoteAPIRequest;
 
 /**
  * Class TicketCreditNoteController.

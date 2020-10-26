@@ -9,8 +9,8 @@ use App\Http\Controllers\AppBaseController;
 use App\Repositories\RespuestaDteXmlRepository;
 use App\Repositories\Criteria\RequestCriteria;
 use App\Repositories\Criteria\LimitOffsetCriteria;
-use App\Http\Requests\API\CreateRespuestaDteXmlAPIRequest;
-use App\Http\Requests\API\UpdateRespuestaDteXmlAPIRequest;
+use App\Http\Request\API\CreateRespuestaDteXmlAPIRequest;
+use App\Http\Request\API\UpdateRespuestaDteXmlAPIRequest;
 
 /**
  * Class RespuestaDteXmlController.

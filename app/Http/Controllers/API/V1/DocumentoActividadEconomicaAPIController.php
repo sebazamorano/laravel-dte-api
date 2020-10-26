@@ -9,8 +9,8 @@ use App\Models\DocumentoActividadEconomica;
 use App\Repositories\Criteria\RequestCriteria;
 use App\Repositories\Criteria\LimitOffsetCriteria;
 use App\Repositories\DocumentoActividadEconomicaRepository;
-use App\Http\Requests\API\CreateDocumentoActividadEconomicaAPIRequest;
-use App\Http\Requests\API\UpdateDocumentoActividadEconomicaAPIRequest;
+use App\Http\Request\API\CreateDocumentoActividadEconomicaAPIRequest;
+use App\Http\Request\API\UpdateDocumentoActividadEconomicaAPIRequest;
 
 /**
  * Class DocumentoActividadEconomicaController.

@@ -26154,7 +26154,7 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
     }
 
     /**
-     * POSTAL and OTHER barcodes
+     * POSTAL and OTHER Barcodes
      */
     function WriteBarcode2($code, $x = '', $y = '', $size = 1, $height = 1, $bgcol = false, $col = false, $btype = 'IMB', $print_ratio = '', $k = 1)
     {

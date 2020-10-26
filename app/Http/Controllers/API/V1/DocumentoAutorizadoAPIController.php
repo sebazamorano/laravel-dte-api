@@ -9,8 +9,8 @@ use App\Http\Controllers\AppBaseController;
 use App\Repositories\Criteria\RequestCriteria;
 use App\Repositories\Criteria\LimitOffsetCriteria;
 use App\Repositories\DocumentoAutorizadoRepository;
-use App\Http\Requests\API\CreateDocumentoAutorizadoAPIRequest;
-use App\Http\Requests\API\UpdateDocumentoAutorizadoAPIRequest;
+use App\Http\Request\API\CreateDocumentoAutorizadoAPIRequest;
+use App\Http\Request\API\UpdateDocumentoAutorizadoAPIRequest;
 
 /**
  * Class DocumentoAutorizadoController.

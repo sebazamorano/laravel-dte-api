@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\API;
+namespace App\Http\Request\API;
 
 use App\Models\Warehouse;
 use App\Http\Request\APIRequest;

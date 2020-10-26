@@ -7,8 +7,8 @@ use App\Models\Banco;
 use Illuminate\Http\Request;
 use App\Repositories\BancoRepository;
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\API\CreateBancoAPIRequest;
-use App\Http\Requests\API\UpdateBancoAPIRequest;
+use App\Http\Request\API\CreateBancoAPIRequest;
+use App\Http\Request\API\UpdateBancoAPIRequest;
 use App\Repositories\Criteria\RequestCriteria;
 use App\Repositories\Criteria\LimitOffsetCriteria;
 

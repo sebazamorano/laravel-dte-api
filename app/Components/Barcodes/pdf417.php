@@ -44,7 +44,7 @@
 //
 //============================================================+
 
-namespace App\Components;
+namespace App\Components\Barcodes;
 
 /*
  * @file
