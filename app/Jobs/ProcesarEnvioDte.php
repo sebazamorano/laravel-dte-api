@@ -21,9 +21,8 @@ class ProcesarEnvioDte implements ShouldQueue
     /**
      * Create a new job instance.
      * @param integer $documento_id
-     * @return void
      */
-    public function __construct($documento_id)
+    public function __construct(int $documento_id)
     {
         $this->id = $documento_id;
     }
@@ -55,9 +54,10 @@ class ProcesarEnvioDte implements ShouldQueue
 
             $empaquetado->archivos()->attach($file->id);
 
-            if($boleta !== 1){
-                $siiComponent = new Sii($documento->empresa);
-                $data = $siiComponent->subirEnvioDteAlSii($empaquetado, $file->id);
+            $siiComponent = new Sii($documento->empresa);
+            $data = $siiComponent->subirEnvioDteAlSii($empaquetado, $file->id);
+
+            if($data !== false){
                 $empaquetado->estado = $data['status'];
                 $empaquetado->rspUpload = Sii::getRspUploadTextFromStatus($empaquetado->estado);
 
@@ -70,6 +70,8 @@ class ProcesarEnvioDte implements ShouldQueue
                 }
 
                 $empaquetado->update();
+            }else{
+                dd('error');
             }
 
         } catch (\Exception $e) {

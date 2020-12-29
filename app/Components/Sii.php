@@ -10,6 +10,7 @@ use App\Models\SII\ConsumoFolios\FolioConsumption;
 use Freshwork\ChileanBundle\Exceptions\InvalidFormatException;
 use Freshwork\ChileanBundle\Rut;
 use GuzzleHttp\Cookie\CookieJar;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\JsonResponse;
 use App\Models\CertificadoEmpresa;
 use Illuminate\Support\Facades\Log;
@@ -32,10 +33,16 @@ class Sii
     const DTERechazadoT = 'RECHAZADO';
     const SemillaCertificacion = 'https://maullin.sii.cl/DTEWS/CrSeed.jws?WSDL';
     const SemillaProduccion = 'https://palena.sii.cl/DTEWS/CrSeed.jws?WSDL';
+    const SemillaBoletaCertificacion = 'https://apicert.sii.cl/recursos/v1/boleta.electronica.semilla';
+    const SemillaBoletaProduccion = 'https://apicert.sii.cl/recursos/v1/boleta.electronica.semilla';
     const TokenCertificacion = 'https://maullin.sii.cl/DTEWS/GetTokenFromSeed.jws?WSDL';
     const TokenProduccion = 'https://palena.sii.cl/DTEWS/GetTokenFromSeed.jws?WSDL';
+    const TokenBoletaCertificacion = 'https://apicert.sii.cl/recursos/v1/boleta.electronica.token';
+    const TokenBoletaProduccion = 'https://apicert.sii.cl/recursos/v1/boleta.electronica.token';
     const UploadCertificacion = 'https://maullin.sii.cl/cgi_dte/UPL/DTEUpload';
     const UploadProduccion = 'https://palena.sii.cl/cgi_dte/UPL/DTEUpload';
+    const UploadBoletaCertificacion = 'https://pangal.sii.cl/recursos/v1/boleta.electronica.envio';
+    const UploadBoletaProduccion = 'https://rahue.sii.cl/recursos/v1/boleta.electronica.envio';
     const WSEstadoEnvioCertificacion = 'https://maullin.sii.cl/DTEWS/QueryEstUp.jws?WSDL';
     const WSEstadoEnvioProduccion = 'https://palena.sii.cl/DTEWS/QueryEstUp.jws?WSDL';
     const WSEstadoDTECertificacion = 'https://maullin.sii.cl/DTEWS/QueryEstDte.jws?WSDL';
@@ -496,9 +503,9 @@ class Sii
         return $dom;
     }
 
-    public function obtenerToken()
+    public function obtenerToken($boleta = 0)
     {
-        $semilla = $this->obtenerSemilla();
+        $semilla = $this->obtenerSemilla($boleta);
 
         if (! $semilla) {
             return false;
@@ -506,35 +513,48 @@ class Sii
 
         $dom = $this->firmarSemilla($semilla);
 
-        $wsdl_token = ($this->ambiente == self::AMBIENTE_PRODUCCION) ? self::TokenProduccion : self::TokenCertificacion;
-        $body_token = null;
-        for ($i = 0; $i < $this->reintentos; $i++) {
-            try {
-                $tokenClient = new \SoapClient($wsdl_token, []);
-                $body_token = $tokenClient->__soapCall('getToken', [$dom->saveXML()]);
-
-                break;
-            } catch (\Throwable  $e) {
-                Log::error($e->getMessage());
-                $body_token = null;
-                usleep(200000);
+        if($boleta == 0){
+            $wsdl_token = ($this->ambiente == self::AMBIENTE_PRODUCCION) ? self::TokenProduccion : self::TokenCertificacion;
+            $body_token = null;
+            for ($i = 0; $i < $this->reintentos; $i++) {
+                try {
+                    $tokenClient = new \SoapClient($wsdl_token, []);
+                    $body_token = $tokenClient->__soapCall('getToken', [$dom->saveXML()]);
+                    break;
+                } catch (\Throwable  $e) {
+                    Log::error($e->getMessage());
+                    $body_token = null;
+                    usleep(200000);
+                }
             }
+        }else{
+            $client = new \GuzzleHttp\Client();
+            $url = ($this->ambiente == self::AMBIENTE_PRODUCCION) ? self::TokenBoletaProduccion : self::TokenBoletaCertificacion;
+            $response = $client->post($url,
+                [
+                    'body' => $dom->saveXML(),
+                    'headers' => [
+                        'Content-type' => 'application/xml',
+                        'User-Agent' => self::USER_AGENT,
+                        'Accept' => 'application/xml',
+                    ]
+                ]);
+            $body_token = $response->getBody()->getContents();
         }
+
 
         if ($body_token === null) {
             Log::error('Existio un error al intentar conectar con el SII - Token');
-
             return false;
         }
 
         $formato = str_replace('SII:', '', $body_token);
         $xml = simplexml_load_string($formato);
         $token = (string) $xml->RESP_BODY->TOKEN;
-
         return $token;
     }
 
-    public function obtenerSemilla()
+    public function obtenerSemilla($boleta = 0)
     {
         /* @var EmpresaParametro $parametro */
         /* @var CertificadoEmpresa $certificado */
@@ -543,26 +563,42 @@ class Sii
             self::throwExceptionEmpresaNoEncontrada();
         }
 
-        $wsdl_semilla = ($this->ambiente == self::AMBIENTE_PRODUCCION) ? self::SemillaProduccion : self::SemillaCertificacion;
+        if($boleta == 0){
+            $wsdl_semilla = ($this->ambiente == self::AMBIENTE_PRODUCCION) ? self::SemillaProduccion : self::SemillaCertificacion;
 
-        for ($i = 0; $i < $this->reintentos; $i++) {
-            try {
-                $soap_client = new \SoapClient($wsdl_semilla, []);
-                $body = $soap_client->__soapCall('getSeed', []);
+            for ($i = 0; $i < $this->reintentos; $i++) {
+                try {
+                    $soap_client = new \SoapClient($wsdl_semilla, []);
+                    $body = $soap_client->__soapCall('getSeed', []);
 
-                break;
-            } catch (\Throwable  $e) {
-                Log::error($e->getMessage());
-                $body = null;
-                usleep(200000);
+                    break;
+                } catch (\Throwable  $e) {
+                    Log::error($e->getMessage());
+                    $body = null;
+                    usleep(200000);
+                }
             }
+
+            if ($body === null) {
+                Log::error('Existio un error al intentar conectar con el SII - Semilla');
+
+                return false;
+            }
+        }else{
+            $client = new \GuzzleHttp\Client();
+            $url = ($this->ambiente == self::AMBIENTE_PRODUCCION) ? self::SemillaBoletaProduccion : self::SemillaBoletaCertificacion;
+
+            $response = $client->get($url,
+                [
+                    'headers' => [
+                        'User-Agent' => self::USER_AGENT,
+                        'Accept' => 'application/xml',
+                    ]
+                ]);
+            $body = $response->getBody()->getContents();
         }
 
-        if ($body === null) {
-            Log::error('Existio un error al intentar conectar con el SII - Semilla');
 
-            return false;
-        }
 
         $seedXML = new \DOMDocument;
         $seedXML->loadXML($body);
@@ -972,7 +1008,7 @@ class Sii
     {
         /* @var $file File*/
         for ($i = 0; $i < $this->reintentos; $i++) {
-            $tokenSII = $this->obtenerToken();
+            $tokenSII = $this->obtenerToken($envioDte->boleta);
             if ($tokenSII !== false) {
                 break;
             }
@@ -997,7 +1033,12 @@ class Sii
         $cuerpo = $this->multipart_build_query($data, $boundary, $xml_string, $xml_name);
         $cuerpo = str_replace("'", '&apos;', $cuerpo);
 
-        $url = ($this->ambiente == self::AMBIENTE_PRODUCCION) ? self::UploadProduccion : self::UploadCertificacion;
+        if($envioDte->boleta == 0){
+            $url = ($this->ambiente == self::AMBIENTE_PRODUCCION) ? self::UploadProduccion : self::UploadCertificacion;
+        }else{
+            $url = ($this->ambiente == self::AMBIENTE_PRODUCCION) ? self::UploadBoletaProduccion : self::UploadBoletaCertificacion;
+        }
+
         $headers =
             [
                 'POST /cgi_dte/UPL/DTEUpload HTTP/1.0',
@@ -1030,21 +1071,34 @@ class Sii
             }
 
             $body = $response->getBody();
-            $xml = ($response and $response != 'Error 500') ? new \SimpleXMLElement($body, LIBXML_COMPACT) : false;
 
-            $estadoUpload = (int) (string) $xml->STATUS;
-            $trackId = 0;
-            $error = '';
+            if($envioDte->boleta == 0){
+                $xml = ($response and $response != 'Error 500') ? new \SimpleXMLElement($body, LIBXML_COMPACT) : false;
 
-            if ($estadoUpload == 0) {
-                $trackId = (int) (string) $xml->TRACKID;
+                $estadoUpload = (int) (string) $xml->STATUS;
+                $trackId = 0;
+                $error = '';
+
+                if ($estadoUpload == 0) {
+                    $trackId = (int) (string) $xml->TRACKID;
+                }
+
+                if ($estadoUpload == 99) {
+                    $error = $xml->DETAIL->ERROR;
+                }
+            }else{
+                $content = json_decode($body->getContents());
+                $trackId = (int) (string) $content->trackid;
+                $estadoUpload = $content->estado == 'REC' ? 0 : 99;
+                $error = 0;
             }
 
-            if ($estadoUpload == 99) {
-                $error = $xml->DETAIL->ERROR;
-            }
+
         } catch (ConnectException $e) {
             $this->throwException($e->getMessage());
+        } catch (ClientException $clientException){
+            //$this->throwException($clientException->getMessage());
+            return false;
         }
 
         return ['status' => $estadoUpload, 'trackId' => $trackId, 'error' => $error];
