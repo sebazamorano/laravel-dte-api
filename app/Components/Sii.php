@@ -34,11 +34,11 @@ class Sii
     const SemillaCertificacion = 'https://maullin.sii.cl/DTEWS/CrSeed.jws?WSDL';
     const SemillaProduccion = 'https://palena.sii.cl/DTEWS/CrSeed.jws?WSDL';
     const SemillaBoletaCertificacion = 'https://apicert.sii.cl/recursos/v1/boleta.electronica.semilla';
-    const SemillaBoletaProduccion = 'https://apicert.sii.cl/recursos/v1/boleta.electronica.semilla';
+    const SemillaBoletaProduccion = 'https://api.sii.cl/recursos/v1/boleta.electronica.semilla';
     const TokenCertificacion = 'https://maullin.sii.cl/DTEWS/GetTokenFromSeed.jws?WSDL';
     const TokenProduccion = 'https://palena.sii.cl/DTEWS/GetTokenFromSeed.jws?WSDL';
     const TokenBoletaCertificacion = 'https://apicert.sii.cl/recursos/v1/boleta.electronica.token';
-    const TokenBoletaProduccion = 'https://apicert.sii.cl/recursos/v1/boleta.electronica.token';
+    const TokenBoletaProduccion = 'https://api.sii.cl/recursos/v1/boleta.electronica.token';
     const UploadCertificacion = 'https://maullin.sii.cl/cgi_dte/UPL/DTEUpload';
     const UploadProduccion = 'https://palena.sii.cl/cgi_dte/UPL/DTEUpload';
     const UploadBoletaCertificacion = 'https://pangal.sii.cl/recursos/v1/boleta.electronica.envio';
@@ -1096,8 +1096,8 @@ class Sii
 
         } catch (ConnectException $e) {
             $this->throwException($e->getMessage());
+            return false;
         } catch (ClientException $clientException){
-            //$this->throwException($clientException->getMessage());
             return false;
         }
 

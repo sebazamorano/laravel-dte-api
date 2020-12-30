@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Components\Sii;
 use App\File;
+use App\Jobs\SubirEnvioDteSii;
 use Carbon\Carbon;
 use Eloquent as Model;
 use App\Components\TipoArchivo;
@@ -363,5 +365,28 @@ class EnvioDte extends Model
         $email->update();
 
         return $email->id;
+    }
+
+    public function subirAllSii()
+    {
+        $siiComponent = new Sii($this->empresa);
+        $data = $siiComponent->subirEnvioDteAlSii($this, $this->archivos()->first()->id);
+
+        if($data !== false){
+            $this->estado = $data['status'];
+            $this->rspUpload = Sii::getRspUploadTextFromStatus($this->estado);
+
+            if ($data['status'] == 0) {
+                $this->trackid = $data['trackId'];
+            }
+
+            if ($data['status'] == 99) {
+                $this->rspUpload = $data['error'];
+            }
+
+            $this->update();
+        }else{
+            //SubirEnvioDteSii::dispatch($documento->id);
+        }
     }
 }

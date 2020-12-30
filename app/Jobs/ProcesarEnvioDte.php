@@ -53,26 +53,7 @@ class ProcesarEnvioDte implements ShouldQueue
             }
 
             $empaquetado->archivos()->attach($file->id);
-
-            $siiComponent = new Sii($documento->empresa);
-            $data = $siiComponent->subirEnvioDteAlSii($empaquetado, $file->id);
-
-            if($data !== false){
-                $empaquetado->estado = $data['status'];
-                $empaquetado->rspUpload = Sii::getRspUploadTextFromStatus($empaquetado->estado);
-
-                if ($data['status'] == 0) {
-                    $empaquetado->trackid = $data['trackId'];
-                }
-
-                if ($data['status'] == 99) {
-                    $empaquetado->rspUpload = $data['error'];
-                }
-
-                $empaquetado->update();
-            }else{
-                dd('error');
-            }
+            $empaquetado->subirAllSii();
 
         } catch (\Exception $e) {
             Log::error($e->getMessage());
