@@ -842,11 +842,7 @@ class Documento extends Model
             ->where(function($query){
                 $query->where('glosaEstadoSii', '<>', 'DTE Recibido')->orWhereNull('glosaEstadoSii')
                     ->orWhereRaw('DATE(created_at) >= DATE_ADD(CURDATE(), INTERVAL -6 MINUTE)');
-             })
-            ->where(function($query2){
-                $query2->where('tipo_documento_id', '<>', 20)
-                    ->where('tipo_documento_id', '<>', 21);
-            })->get();
+             })->get();
         return $documentos;
     }
 
