@@ -840,10 +840,28 @@ class Documento extends Model
         $documentos = self::where('empresa_id', $empresa_id)
             ->where('IO', 0)
             ->where(function($query){
+                $query->where('glosaEstadoSii', '=', 'DTE Recibido')->orWhereNull('glosaEstadoSii')
+                    ->orWhereRaw('DATE(created_at) >= DATE_ADD(CURDATE(), INTERVAL -6 MINUTE)');
+             })
+            ->where(function($query2){
+                $query2->where('tipo_documento_id', '<>', 20)
+                    ->where('tipo_documento_id', '<>', 21);
+            })->get();
+
+        $boletas = self::where('empresa_id', $empresa_id)
+            ->where('IO', 0)
+            ->where(function($query){
                 $query->where('glosaEstadoSii', '<>', 'DTE Recibido')->orWhereNull('glosaEstadoSii')
                     ->orWhereRaw('DATE(created_at) >= DATE_ADD(CURDATE(), INTERVAL -6 MINUTE)');
-             })->get();
-        return $documentos;
+            })
+            ->where(function($query2){
+                $query2->where('tipo_documento_id', 20)
+                    ->orWhere('tipo_documento_id',  21);
+            })
+            ->where('fechaEmision', '>', '2020-12-01')->get();
+
+        $merged = $documentos->merge($boletas);
+        return $merged;
     }
 
     public static function buscar(Request $request, $company_id = null)
@@ -1020,8 +1038,15 @@ class Documento extends Model
             $this->glosaErrSii = $xml->RESP_HDR->GLOSA_ERR;
             $this->save();
         }else{
+
+            if(strpos($data->descripcion, "Documento Recibido por el SII") === false){
+                $this->glosaEstadoSii = 'DTE NoRecibido';
+            }else{
+                $this->glosaEstadoSii = 'DTE Recibido';
+            }
+
             $this->estadoSii = $data->codigo;
-            $this->glosaEstadoSii = $data->descripcion;
+            $this->glosaErrSii = $data->descripcion;
             $this->save();
         }
 
