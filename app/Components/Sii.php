@@ -3,6 +3,7 @@
 namespace App\Components;
 
 use App\File;
+use App\Models\Documento;
 use App\Models\Empresa;
 use App\Models\EnvioDte;
 use App\Models\EmpresaParametro;
@@ -35,6 +36,8 @@ class Sii
     const SemillaProduccion = 'https://palena.sii.cl/DTEWS/CrSeed.jws?WSDL';
     const SemillaBoletaCertificacion = 'https://apicert.sii.cl/recursos/v1/boleta.electronica.semilla';
     const SemillaBoletaProduccion = 'https://api.sii.cl/recursos/v1/boleta.electronica.semilla';
+    const ApiBoletaCertificacion = 'https://apicert.sii.cl/recursos/v1/boleta.electronica';
+    const ApiBoletaProduccion = 'https://api.sii.cl/recursos/v1/boleta.electronica';
     const TokenCertificacion = 'https://maullin.sii.cl/DTEWS/GetTokenFromSeed.jws?WSDL';
     const TokenProduccion = 'https://palena.sii.cl/DTEWS/GetTokenFromSeed.jws?WSDL';
     const TokenBoletaCertificacion = 'https://apicert.sii.cl/recursos/v1/boleta.electronica.token';
@@ -1321,9 +1324,15 @@ class Sii
     }
 
     public function consultarEstadoDte($documento){
+
+        $boleta = 0;
+        if($documento['tipo'] == 39 || $documento['tipo'] == 41){
+            $boleta = 1;
+        }
+
         $tokenSII = false;
         for ($i = 0; $i < $this->reintentos; $i++) {
-            $tokenSII = $this->obtenerToken();
+            $tokenSII = $this->obtenerToken($boleta);
             if ($tokenSII !== false) {
                 break;
             }
@@ -1334,36 +1343,64 @@ class Sii
         }
         $array_rut_emisor = self::getRutArray($documento['rut_emisor']);
         $array_rut_receptor = self::getRutArray($documento['rut_receptor']);
-        $array_rut_consultante = self::getRutArray($documento['rut_consultante']);
 
-        $data_to_send = [
-            'RutConsultante' => $array_rut_consultante['number'],
-            'DvConsultante' => $array_rut_consultante['dv'],
-            'RutCompania' => $array_rut_emisor['number'],
-            'DvCompania' => $array_rut_emisor['dv'],
-            'RutReceptor' => $array_rut_receptor['number'],
-            'DvReceptor' => $array_rut_receptor['dv'],
-            'TipoDte' => $documento['tipo'],
-            'FolioDte' => $documento['folio'],
-            'FechaEmisionDte' => $documento['fecha_emision'],
-            'MontoDte' => $documento['monto'],
-            'Token' => "$tokenSII"
-        ];
-        $response = null;
-        $wsdl_consulta = ($this->ambiente == self::AMBIENTE_PRODUCCION) ? self::WSEstadoDTEProduccion : self::WSEstadoDTECertificacion;
-        for ($i = 0; $i < $this->reintentos; $i++) {
-            try {
-                $stateClient = new \SoapClient($wsdl_consulta, []);
-                $stateClient->__setCookie('TOKEN', $tokenSII);
-                $response = $stateClient->__soapCall('getEstDte', $data_to_send);
+        if($boleta == 0){
+            $array_rut_consultante = self::getRutArray($documento['rut_consultante']);
 
-                break;
-            } catch (\Throwable  $e) {
-                Log::error($e->getMessage());
-                $response = null;
-                usleep(200000);
+            $data_to_send = [
+                'RutConsultante' => $array_rut_consultante['number'],
+                'DvConsultante' => $array_rut_consultante['dv'],
+                'RutCompania' => $array_rut_emisor['number'],
+                'DvCompania' => $array_rut_emisor['dv'],
+                'RutReceptor' => $array_rut_receptor['number'],
+                'DvReceptor' => $array_rut_receptor['dv'],
+                'TipoDte' => $documento['tipo'],
+                'FolioDte' => $documento['folio'],
+                'FechaEmisionDte' => $documento['fecha_emision'],
+                'MontoDte' => $documento['monto'],
+                'Token' => "$tokenSII"
+            ];
+
+            $response = null;
+            $wsdl_consulta = ($this->ambiente == self::AMBIENTE_PRODUCCION) ? self::WSEstadoDTEProduccion : self::WSEstadoDTECertificacion;
+            for ($i = 0; $i < $this->reintentos; $i++) {
+                try {
+                    $stateClient = new \SoapClient($wsdl_consulta, []);
+                    $stateClient->__setCookie('TOKEN', $tokenSII);
+                    $response = $stateClient->__soapCall('getEstDte', $data_to_send);
+
+                    break;
+                } catch (\Throwable  $e) {
+                    Log::error($e->getMessage());
+                    $response = null;
+                    usleep(200000);
+                }
             }
+        }else{
+            $array_rut_receptor = self::getRutArray($documento['rut_receptor']);
+
+            $url_base = ($this->ambiente == self::AMBIENTE_PRODUCCION) ? self::ApiBoletaProduccion : self::ApiBoletaCertificacion;
+            $client = new \GuzzleHttp\Client();
+            $url = "{$url_base}/{$array_rut_emisor['number']}-{$array_rut_emisor['dv']}-{$documento['tipo']}-{$documento['folio']}/estado";
+            $request = $client->get($url, [
+                'query' => [
+                    'rut_receptor' => $array_rut_receptor['number'],
+                    'dv_receptor' => $array_rut_receptor['dv'],
+                    'monto' => $documento['monto'],
+                    'fechaEmision' => $documento['fecha_emision_boleta']
+                ],
+                'headers' => [
+                    'User-Agent' => self::USER_AGENT,
+                    'Accept' => 'application/json',
+                    'Cookie' => "TOKEN={$tokenSII}",
+                ]
+            ]);
+
+            $contents = json_decode($request->getBody()->getContents());
+            return $contents;
         }
+
+
 
         if ($response === null) {
             Log::error('Existio un error al intentar conectar con el SII - getEstDte');

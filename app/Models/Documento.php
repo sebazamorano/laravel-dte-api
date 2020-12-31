@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Components\Pdf;
+use App\Components\Sii;
 use App\Components\tcpdf_barcodes_2d;
 use App\File;
 use Carbon\Carbon;
@@ -11,6 +12,7 @@ use App\Components\Xml;
 use Illuminate\Http\Request;
 use App\Components\TipoArchivo;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -993,4 +995,41 @@ class Documento extends Model
 
         return false;
     }
+
+    public function consultarEstadoSii()
+    {
+        /* @var CertificadoEmpresa $certificado  */
+        $certificado = $this->empresa->certificados()->where('enUso', 1)->first();
+        $siiComponent = new Sii($this->empresa);
+
+        $documento = [
+            'rut_emisor' => $this->emisor->RUTEmisor,
+            'rut_receptor' => $this->receptor->RUTRecep,
+            'rut_consultante' => $certificado->rut,
+            'tipo' => $this->idDoc->TipoDTE,
+            'folio' => (string) $this->idDoc->Folio,
+            'fecha_emision' => $this->idDoc->FchEmis->format('dmY'),
+            'fecha_emision_boleta' => $this->idDoc->FchEmis->format('d-m-Y'),
+            'monto' => (string) $this->totales->MntTotal
+        ];
+
+        $data = $siiComponent->consultarEstadoDte($documento);
+
+        if(!in_array($this->idDoc->TipoDTE, [39,41])){
+            $formato = str_replace('SII:', '', $data );
+            $xml = simplexml_load_string($formato);
+            $this->estadoSii = $xml->RESP_HDR->ESTADO;
+            $this->glosaEstadoSii = $xml->RESP_HDR->GLOSA_ESTADO;
+            $this->errCode = $xml->RESP_HDR->ERR_CODE;
+            $this->glosaErrSii = $xml->RESP_HDR->GLOSA_ERR;
+            $this->save();
+        }else{
+            $this->estadoSii = $data->codigo;
+            $this->glosaEstadoSii = $data->descripcion;
+            $this->save();
+        }
+
+        Log::info('Documento con ID: ' . $this->id . ' actualizado con estado:' . $this->glosaEstadoSii);
+    }
+
 }
