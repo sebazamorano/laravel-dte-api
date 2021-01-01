@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Jobs\UpdateDteInformationWithWs;
 use App\Models\Documento;
 use App\Models\Empresa;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class UpdateDteInformationWs extends Command
@@ -50,8 +51,11 @@ class UpdateDteInformationWs extends Command
             $this->info('Obteniendo documentos de la empresa [' . $company->rut . ']' . $company->razonSocial);
             $documentos = Documento::getDocumentsCreatedInLastFiveMins($company->id);
             foreach($documentos as $documento){
+                /* @var Documento $documento */
+
                 $this->info('Enviando Job a la queue UpdateDteInformationWithWs del documento id' . $documento->id);
                 UpdateDteInformationWithWs::dispatch($documento);
+
             }
             echo "\n";
             $bar->advance();

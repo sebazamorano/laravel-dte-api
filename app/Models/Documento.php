@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Components\Pdf;
+use App\Components\Sii;
 use App\Components\tcpdf_barcodes_2d;
 use App\File;
 use Carbon\Carbon;
@@ -11,6 +12,7 @@ use App\Components\Xml;
 use Illuminate\Http\Request;
 use App\Components\TipoArchivo;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -845,7 +847,25 @@ class Documento extends Model
                 $query2->where('tipo_documento_id', '<>', 20)
                     ->where('tipo_documento_id', '<>', 21);
             })->get();
+
         return $documentos;
+    }
+
+    public static function getTicketsCreatedInLastFiveMins($empresa_id)
+    {
+        $boletas = self::where('empresa_id', $empresa_id)
+            ->where('IO', 0)
+            ->where(function($query){
+                $query->where('glosaEstadoSii', '<>', 'DTE Recibido')->orWhereNull('glosaEstadoSii');
+            })
+            ->where(function($query2){
+                $query2->where('tipo_documento_id', 20)
+                    ->orWhere('tipo_documento_id',  21);
+            })
+            ->whereRaw('DATE(created_at) >= DATE_ADD(CURDATE(), INTERVAL -6 MINUTE)')
+            ->where('fechaEmision', '>', '2020-12-31')->get();
+
+        return $boletas;
     }
 
     public static function buscar(Request $request, $company_id = null)
@@ -993,4 +1013,48 @@ class Documento extends Model
 
         return false;
     }
+
+    public function consultarEstadoSii()
+    {
+        /* @var CertificadoEmpresa $certificado  */
+        $certificado = $this->empresa->certificados()->where('enUso', 1)->first();
+        $siiComponent = new Sii($this->empresa);
+
+        $documento = [
+            'rut_emisor' => $this->emisor->RUTEmisor,
+            'rut_receptor' => $this->receptor->RUTRecep,
+            'rut_consultante' => $certificado->rut,
+            'tipo' => $this->idDoc->TipoDTE,
+            'folio' => (string) $this->idDoc->Folio,
+            'fecha_emision' => $this->idDoc->FchEmis->format('dmY'),
+            'fecha_emision_boleta' => $this->idDoc->FchEmis->format('d-m-Y'),
+            'monto' => (string) $this->totales->MntTotal
+        ];
+
+        $data = $siiComponent->consultarEstadoDte($documento);
+
+        if(!in_array($this->idDoc->TipoDTE, [39,41])){
+            $formato = str_replace('SII:', '', $data );
+            $xml = simplexml_load_string($formato);
+            $this->estadoSii = $xml->RESP_HDR->ESTADO;
+            $this->glosaEstadoSii = $xml->RESP_HDR->GLOSA_ESTADO;
+            $this->errCode = $xml->RESP_HDR->ERR_CODE;
+            $this->glosaErrSii = $xml->RESP_HDR->GLOSA_ERR;
+            $this->save();
+        }else{
+
+            if(strpos($data->descripcion, "Documento Recibido por el SII") === false){
+                $this->glosaEstadoSii = 'DTE NoRecibido';
+            }else{
+                $this->glosaEstadoSii = 'DTE Recibido';
+            }
+
+            $this->estadoSii = $data->codigo;
+            $this->glosaErrSii = $data->descripcion;
+            $this->save();
+        }
+
+        Log::info('Documento con ID: ' . $this->id . ' actualizado con estado:' . $this->glosaEstadoSii);
+    }
+
 }

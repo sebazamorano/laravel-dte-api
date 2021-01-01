@@ -63,6 +63,7 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => 'borrar aceptacion/reclamos', 'guard_name' => 'api']);
         Permission::create(['name' => 'enviar pdf dte', 'guard_name' => 'api']);
         Permission::create(['name' => 'ver certificados digitales', 'guard_name' => 'api']);
+        Permission::create(['name' => 'subir certificados digitales', 'guard_name' => 'api']);
         Permission::create(['name' => 'crear certificados digitales', 'guard_name' => 'api']);
         Permission::create(['name' => 'editar certificados digitales', 'guard_name' => 'api']);
         Permission::create(['name' => 'borrar certificados digitales', 'guard_name' => 'api']);
