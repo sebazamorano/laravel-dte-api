@@ -848,20 +848,24 @@ class Documento extends Model
                     ->where('tipo_documento_id', '<>', 21);
             })->get();
 
+        return $documentos;
+    }
+
+    public static function getTicketsCreatedInLastFiveMins($empresa_id)
+    {
         $boletas = self::where('empresa_id', $empresa_id)
             ->where('IO', 0)
             ->where(function($query){
-                $query->where('glosaEstadoSii', '<>', 'DTE Recibido')->orWhereNull('glosaEstadoSii')
-                    ->orWhereRaw('DATE(created_at) >= DATE_ADD(CURDATE(), INTERVAL -6 MINUTE)');
+                $query->where('glosaEstadoSii', '<>', 'DTE Recibido')->orWhereNull('glosaEstadoSii');
             })
             ->where(function($query2){
                 $query2->where('tipo_documento_id', 20)
                     ->orWhere('tipo_documento_id',  21);
             })
+            ->whereRaw('DATE(created_at) >= DATE_ADD(CURDATE(), INTERVAL -6 MINUTE)')
             ->where('fechaEmision', '>', '2020-12-31')->get();
 
-        $merged = $documentos->merge($boletas);
-        return $merged;
+        return $boletas;
     }
 
     public static function buscar(Request $request, $company_id = null)

@@ -41,32 +41,24 @@ class UpdateDteInformationWs extends Command
      */
     public function handle()
     {
-        if(config('dte.server_provider') !== 'vapor'){
-            $companies = Empresa::all();
+        $companies = Empresa::all();
 
-            $bar = $this->output->createProgressBar(count($companies));
-            $bar->start();
-            echo "\n";
+        $bar = $this->output->createProgressBar(count($companies));
+        $bar->start();
+        echo "\n";
 
-            foreach ($companies as $company) {
-                $this->info('Obteniendo documentos de la empresa [' . $company->rut . ']' . $company->razonSocial);
-                $documentos = Documento::getDocumentsCreatedInLastFiveMins($company->id);
-                foreach($documentos as $documento){
-                    /* @var Documento $documento */
-                    if(($documento->idDoc->TipoDTE == "41" || $documento->idDoc->TipoDTE == "39") && Carbon::now()->gte('2021-01-01 00:00:00') && $documento->idDoc->FchEmis->gte('2021-01-01 00:00:00') ){
-                        $this->info('Enviando Job a la queue UpdateDteInformationWithWs del documento boleta id' . $documento->id);
-                        UpdateDteInformationWithWs::dispatch($documento);
-                    }
+        foreach ($companies as $company) {
+            $this->info('Obteniendo documentos de la empresa [' . $company->rut . ']' . $company->razonSocial);
+            $documentos = Documento::getDocumentsCreatedInLastFiveMins($company->id);
+            foreach($documentos as $documento){
+                /* @var Documento $documento */
 
-                    if($documento->idDoc->TipoDTE !== "41" && $documento->idDoc->TipoDTE !== "39"){
-                        $this->info('Enviando Job a la queue UpdateDteInformationWithWs del documento id' . $documento->id);
-                        UpdateDteInformationWithWs::dispatch($documento);
-                    }
+                $this->info('Enviando Job a la queue UpdateDteInformationWithWs del documento id' . $documento->id);
+                UpdateDteInformationWithWs::dispatch($documento);
 
-                }
-                echo "\n";
-                $bar->advance();
             }
+            echo "\n";
+            $bar->advance();
         }
     }
 }
