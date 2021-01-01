@@ -840,7 +840,7 @@ class Documento extends Model
         $documentos = self::where('empresa_id', $empresa_id)
             ->where('IO', 0)
             ->where(function($query){
-                $query->where('glosaEstadoSii', '=', 'DTE Recibido')->orWhereNull('glosaEstadoSii')
+                $query->where('glosaEstadoSii', '<>', 'DTE Recibido')->orWhereNull('glosaEstadoSii')
                     ->orWhereRaw('DATE(created_at) >= DATE_ADD(CURDATE(), INTERVAL -6 MINUTE)');
              })
             ->where(function($query2){
