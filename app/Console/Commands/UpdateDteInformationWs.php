@@ -53,8 +53,7 @@ class UpdateDteInformationWs extends Command
                 $documentos = Documento::getDocumentsCreatedInLastFiveMins($company->id);
                 foreach($documentos as $documento){
                     /* @var Documento $documento */
-
-                    if(($documento->idDoc->TipoDTE == "41" || $documento->idDoc->TipoDTE == "39") && Carbon::now()->gte('2021-01-01 00:00:00') ){
+                    if(($documento->idDoc->TipoDTE == "41" || $documento->idDoc->TipoDTE == "39") && Carbon::now()->gte('2021-01-01 00:00:00') && $documento->idDoc->FchEmis->gte('2021-01-01 00:00:00') ){
                         $this->info('Enviando Job a la queue UpdateDteInformationWithWs del documento boleta id' . $documento->id);
                         UpdateDteInformationWithWs::dispatch($documento);
                     }
