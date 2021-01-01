@@ -858,7 +858,7 @@ class Documento extends Model
                 $query2->where('tipo_documento_id', 20)
                     ->orWhere('tipo_documento_id',  21);
             })
-            ->where('fechaEmision', '>', '2020-12-01')->get();
+            ->where('fechaEmision', '>', '2020-12-31')->get();
 
         $merged = $documentos->merge($boletas);
         return $merged;
