@@ -584,7 +584,6 @@ class Sii
 
             if ($body === null) {
                 Log::error('Existio un error al intentar conectar con el SII - Semilla');
-
                 return false;
             }
         }else{
@@ -600,8 +599,6 @@ class Sii
                 ]);
             $body = $response->getBody()->getContents();
         }
-
-
 
         $seedXML = new \DOMDocument;
         $seedXML->loadXML($body);
@@ -1341,6 +1338,7 @@ class Sii
         if ($tokenSII === false) {
             return false;
         }
+
         $array_rut_emisor = self::getRutArray($documento['rut_emisor']);
         $array_rut_receptor = self::getRutArray($documento['rut_receptor']);
 
