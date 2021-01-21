@@ -20,3 +20,5 @@ yarn-error.log
 .env.dev
 .vapor
 vapor.yml
+
+.envault.json
