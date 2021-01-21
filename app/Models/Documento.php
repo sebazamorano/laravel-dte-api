@@ -1042,7 +1042,6 @@ class Documento extends Model
             $this->glosaErrSii = $xml->RESP_HDR->GLOSA_ERR;
             $this->save();
         }else{
-
             if(strpos($data->descripcion, "Documento Recibido por el SII") === false){
                 $this->glosaEstadoSii = 'DTE NoRecibido';
             }else{
