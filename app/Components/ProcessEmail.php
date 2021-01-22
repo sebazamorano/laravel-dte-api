@@ -18,6 +18,9 @@ class ProcessEmail
         $port = config('dte.mail_reception_port');
         $mailbox = "{{$host}:{$port}/imap/ssl}INBOX";
 
+        if(empty($host)){
+            return true;
+        }
 
         $reader = new \App\Components\MailReader($mailbox, $username, $password);
         $connection = $reader->getConnection();
