@@ -3,6 +3,7 @@
 namespace App\Components;
 
 use App\File;
+use App\Models\Empresa;
 use Carbon\Carbon;
 use App\Models\Email;
 use App\Models\EnvioDte;
@@ -234,8 +235,12 @@ class Xml
         return false;
     }
 
-    public static function procesarResultadoEnvio(Email $email, \DOMDocument $xml)
+    public static function procesarResultadoEnvio($xml_string, $from, Email $email = null)
     {
+        /* $from 1 == imap, 2 == sns */
+        $xml = new \DOMDocument('1.0');
+        $xml->loadXML($xml_string);
+
         /* @var EnvioDte $envio */
         $identificacion = $xml->getElementsByTagName('IDENTIFICACION')->item(0);
 
@@ -261,7 +266,13 @@ class Xml
             $no_valido = 0;
         }
 
-        $envio = EnvioDte::where(['rutEmisor' => $rut_emisor, 'rutEnvia' => $rut_envia, 'trackid' => $trackid, 'IO' => 0, 'empresa_id' => $email->empresa_id])->first();
+        if($from == 1){
+            $empresa = Empresa::where('rut', $rut_emisor)->first();
+        }else{
+            $empresa = $email->empresa;
+        }
+
+        $envio = EnvioDte::where(['rutEmisor' => $rut_emisor, 'rutEnvia' => $rut_envia, 'trackid' => $trackid, 'IO' => 0, 'empresa_id' => $empresa->id])->first();
 
         if (! empty($envio)) {
             $envio->glosa = $estado;

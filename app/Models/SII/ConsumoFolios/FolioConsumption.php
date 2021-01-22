@@ -339,20 +339,12 @@ class FolioConsumption extends Model
         }
     }
 
-    public static function saveMailResponse($data)
+    public static function saveResponse($data)
     {
-        $data = [
-            'trackid' => '79001116',
-            'rutEmisor' => '76244467-4',
-            'rutEnvia' => '14423983-0',
-            'fchInicio' => '2020-02-20',
-            'fchFinal' => '2020-02-20',
-            'secEnvio' => '1',
-            'glosa' => 'CORRECTO',
-        ];
-        $glosa = $data['glosa'];
-        unset($data['glosa']);
-
-        self::where($data)->update(['glosa' => $glosa]);
+        if ($data !== false){
+            $glosa = $data['glosa'];
+            unset($data['glosa']);
+            self::where($data)->update(['glosa' => $glosa]);
+        }
     }
 }

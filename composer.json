@@ -32,7 +32,8 @@
         "pusher/pusher-php-server": "~4.0",
         "spatie/laravel-permission": "^3.0",
         "spiritix/lada-cache": "^4.0",
-        "zbateson/mail-mime-parser": "^1.1"
+        "zbateson/mail-mime-parser": "^1.1",
+      "ext-imap": "*"
     },
     "require-dev": {
         "beyondcode/tinkerwell-helper": "^1.0",

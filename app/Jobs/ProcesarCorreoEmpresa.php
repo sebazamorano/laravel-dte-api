@@ -56,7 +56,7 @@ class ProcesarCorreoEmpresa implements ShouldQueue
                         switch ($tagName) {
                             case 'RESULTADO_ENVIO':
                                 Log::info('El email con id '.$email->id.' entro al proceso [resultado_envio]');
-                                Xml::procesarResultadoEnvio($email, $xml);
+                                Xml::procesarResultadoEnvio($xml->saveXML(), 2, $email);
 
                                 break;
 
