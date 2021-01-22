@@ -445,8 +445,6 @@ class Xml
 
                 $dte_enviar->update();
             }
-        } else {
-            Log::error('El envio no fue encontrado para el email '.$email->id);
         }
     }
 
