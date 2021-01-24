@@ -37,6 +37,6 @@ class ReadEmails extends Command
      */
     public function handle()
     {
-        \App\Components\ProcessEmail::readEmail();
+        return \App\Components\ProcessEmail::readEmail();
     }
 }

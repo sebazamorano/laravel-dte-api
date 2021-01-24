@@ -26,13 +26,11 @@ class ProcessEmail
         $connection = $reader->getConnection();
         $result = $reader->returnUnseen();
         $valid = true;
+
         if(is_array($result)){
             $EnvioDTE = 0;
             $emails_quantity = 0;
             foreach($result as $message){
-                if($emails_quantity == 1){
-                    exit();
-                }
                 $structure = imap_fetchstructure($connection, $message);
                 imap_fetchbody($connection, $message, 1);
                 $headers = imap_headerinfo($connection, $message);
@@ -125,5 +123,6 @@ class ProcessEmail
                 $emails_quantity++;
             }
         }
+        return true;
     }
 }
