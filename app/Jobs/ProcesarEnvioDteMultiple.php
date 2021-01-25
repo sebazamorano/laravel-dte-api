@@ -55,6 +55,7 @@ class ProcesarEnvioDteMultiple implements ShouldQueue
             $file = $envio->subirXmlS3($xml_string);
             $envio->archivos()->attach($file->id);
             $envio->subirAllSii();
+            echo 'ID ENVIO ' . $envio->id;
         }
     }
 }
