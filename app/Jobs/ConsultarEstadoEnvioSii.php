@@ -32,6 +32,7 @@ class ConsultarEstadoEnvioSii implements ShouldQueue
     public function handle()
     {
         /* @var EnvioDte $envio */
+        echo "Consultando Estado Envio " . $this->id . "\n";
         $envio = EnvioDte::find($this->id);
         $envio->consultarEstadoSii();
     }
