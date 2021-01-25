@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Eloquent as Model;
 use App\Components\TipoArchivo;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -388,5 +389,106 @@ class EnvioDte extends Model
         }else{
             //SubirEnvioDteSii::dispatch($documento->id);
         }
+    }
+
+    public function consultarEstadoSii($token = false)
+    {
+        $siiComponent = new Sii($this->empresa);
+
+        $envio = [
+            'rut_emisor' => $this->empresa->rut,
+            'boleta' => $this->boleta,
+            'trackId' => $this->trackid
+        ];
+
+        $data = $siiComponent->consultarEstadoEnvio($envio, $token);
+
+        if(!$this->boleta){
+
+        }else{
+
+            $rechazados_reparos = 0;
+            foreach($data->estadistica as $estadistica){
+                $resultado_envio = new EstadisticaEnvio();
+                $resultado_envio->envio_dte_id = $this->id;
+                $resultado_envio->empresa_id = $this->empresa_id;
+                $resultado_envio->tipoDoc = $estadistica->tipo;
+                $resultado_envio->informado = $estadistica->informados;
+                $resultado_envio->acepta = $estadistica->aceptados;
+                $resultado_envio->rechazo = $estadistica->rechazados;
+                $resultado_envio->reparo = $estadistica->reparos;
+                $resultado_envio->save();
+
+                if($estadistica->reparos > 0 || $estadistica->rechazados > 0){
+                    $rechazados_reparos++;
+                }
+            }
+
+            $folios_array = [];
+            if($rechazados_reparos > 0){
+                foreach($data->detalle_rep_rech as $detalle){
+                    $revision = new EnvioDteRevision();
+                    $revision->envio_dte_id = $this->id;
+                    $revision->empresa_id = $this->empresa_id;
+
+                    $revision->folio = $detalle->folio;
+                    $revision->tipoDte = $detalle->tipo;
+                    $revision->estado = $detalle->estado;
+                    $revision->save();
+
+                    $folio_array = ['Folio'=>$detalle->folio, 'TipoDTE'=>$detalle->tipo, 'Estado'=>$detalle->estado];
+                    array_push($folios_array, $folio_array);
+
+                    foreach($detalle->error as $error){
+                        $detalles_revision = new EnvioDteRevisionDetalle();
+                        $detalles_revision->envio_dte_revision_id = $revision->id;
+                        $detalles_revision->empresa_id = $this->empresa_id;
+                        $detalles_revision->detalle = $error->descripcion . ' d:' . $error->detalle;
+                        $detalles_revision->save();
+                    }
+                }
+            }
+
+            $arreglo_envio = [];
+            foreach ($this->documentos as $dte_enviar) {
+                array_push($arreglo_envio, ['TipoDTE'=>$dte_enviar->idDoc->TipoDTE, 'Folio'=>$dte_enviar->folio, 'Marca'=>0, 'Estado'=>'', 'id'=>$dte_enviar->id]);
+            }
+
+            foreach ($arreglo_envio as &$arreglo) {
+                foreach ($folios_array as $arreglo_folio) {
+                    if ($arreglo['TipoDTE'] == $arreglo_folio['TipoDTE'] && $arreglo['Folio'] == $arreglo_folio['Folio']) {
+                        $arreglo['Marca'] = 1;
+                        $arreglo['Estado'] = $arreglo_folio['Estado'];
+                    }
+                }
+            }
+
+            foreach ($arreglo_envio as $arregloEnviar) {
+                $dte_enviar = Documento::find($arregloEnviar['id']);
+
+                $dte_enviar->glosaEstadoSii = 'DTE Recibido';
+                $dte_enviar->glosaErrSii = 'Documento Recibido por el SII. Datos Coinciden con los Registrados [API]';
+
+                if ($arregloEnviar['Marca'] == 1) {
+                    $dte_enviar->glosaErrSii = 'Documento Recibido por el SII. Recibido con Reparos [API]';
+                }
+
+                if ($arregloEnviar['Estado'] == 'RCH') {
+                    $dte_enviar->glosaEstadoSii = 'DTE Rechazado';
+                    $dte_enviar->glosaErrSii = 'Documento NO Recibido por el SII. [API]';
+                }
+
+                $dte_enviar->update();
+            }
+        }
+
+        if($data->estado == "EPR"){
+            $this->recepEnvGlosa = 'Envio Recibido';
+        }else{
+            $this->recepEnvGlosa = 'Envio Rechazado';
+        }
+
+        $this->save();
+
     }
 }

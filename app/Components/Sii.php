@@ -1409,4 +1409,40 @@ class Sii
 
         return $response;
     }
+
+    public function consultarEstadoEnvio($envio, $tokenSII = false){
+
+        if($tokenSII === false){
+            for ($i = 0; $i < $this->reintentos; $i++) {
+                $tokenSII = $this->obtenerToken($envio['boleta']);
+                if ($tokenSII !== false) {
+                    break;
+                }
+            }
+        }
+
+        if ($tokenSII === false) {
+            return false;
+        }
+
+        $array_rut_emisor = self::getRutArray($envio['rut_emisor']);
+
+        if($envio['boleta'] == 0){
+            return false;
+        }else{
+
+            $url_base = ($this->ambiente == self::AMBIENTE_PRODUCCION) ? self::ApiBoletaProduccion : self::ApiBoletaCertificacion;
+            $client = new \GuzzleHttp\Client();
+            $url = "{$url_base}.envio/{$array_rut_emisor['number']}-{$array_rut_emisor['dv']}-{$envio['trackId']}";
+            $request = $client->get($url, [
+                'headers' => [
+                    'User-Agent' => self::USER_AGENT,
+                    'Accept' => 'application/json',
+                    'Cookie' => "TOKEN={$tokenSII}",
+                ]
+            ]);
+            $contents = json_decode($request->getBody()->getContents());
+            return $contents;
+        }
+    }
 }

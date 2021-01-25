@@ -13,7 +13,7 @@ class CreateEnvioDteRevisionDetallesTable extends Migration
     public function up()
     {
         Schema::create('envio_dte_revision_detalles', function (Blueprint $table) {
-            $table->BigIncrements('id');
+            $table->bigIncrements('id');
             $table->unsignedBigInteger('envio_dte_revision_id');
             $table->unsignedBigInteger('empresa_id');
             $table->text('detalle')->nullable();

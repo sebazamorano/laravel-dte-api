@@ -13,7 +13,7 @@ class CreateDetallesRespuestasDtesXmlsTable extends Migration
     public function up()
     {
         Schema::create('detalles_respuestas_dtes_xmls', function (Blueprint $table) {
-            $table->BigIncrements('id');
+            $table->bigIncrements('id');
             $table->unsignedBigInteger('respuesta_dte_xml_id');
             $table->tinyInteger('tipoDte')->nullable();
             $table->unsignedInteger('folio');

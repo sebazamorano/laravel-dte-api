@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Documento;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -48,14 +49,19 @@ class ProcesarEnvioDteMultiple implements ShouldQueue
             $different_documents_count++;
         }
 
-
         if($different_documents_count == 1){
             $envio = \App\Models\EnvioDte::empaquetarDtes($documentos, 0, $boleta);
             $xml_string = $envio->generarXML();
             $file = $envio->subirXmlS3($xml_string);
             $envio->archivos()->attach($file->id);
             $envio->subirAllSii();
-            echo 'ID ENVIO ' . $envio->id;
+            \App\Models\Documento::whereIn('id', $this->ids)->update(['glosaEstadoSii' => 'DTE Enviado Multiple']);
+
+            if($boleta == 1){
+                ConsultarEstadoEnvioSii::dispatch($envio->id)->delay(Carbon::now()->addMinutes(1));
+            }
+
+            echo "ID ENVIO " . $envio->id . "\n";
         }
     }
 }

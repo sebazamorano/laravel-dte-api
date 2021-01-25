@@ -13,7 +13,7 @@ class CreateEnvioDteErroresTable extends Migration
     public function up()
     {
         Schema::create('envio_dte_errores', function (Blueprint $table) {
-            $table->BigIncrements('id');
+            $table->bigIncrements('id');
             $table->unsignedBigInteger('envio_dte_id');
             $table->text('texto');
             $table->timestamps();

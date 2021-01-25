@@ -5,6 +5,7 @@ return [
     'server_provider' => env('DTE_SERVER_PROVIDER', 'local'),
     'document_verification_url' => env('DTE_DOCUMENT_VERIFICATION_URL', ''),
     'cron_mail' => env('DTE_CRON_MAIL', ''),
+    'max_quantity_packing' => env('DTE_MAX_QUANTITY_PACKING', 150),
     'mail_reception_username' => env('DTE_MAIL_RECEPTION_USERNAME', ''),
     'mail_reception_password' => env('DTE_MAIL_RECEPTION_PASSWORD', ''),
     'mail_reception_host' => env('DTE_MAIL_RECEPTION_HOST', ''),
