@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
 
 class ProcesarEnvioDteMultiple implements ShouldQueue
 {
@@ -32,7 +33,8 @@ class ProcesarEnvioDteMultiple implements ShouldQueue
      */
     public function handle()
     {
-
+        $random_id = Str::random();
+        echo "Iniciando proceso de envio dte multiple " . $random_id . "\n";
         $documentos = Documento::find($this->ids);
 
         $different_documents_count = 0;
@@ -62,6 +64,7 @@ class ProcesarEnvioDteMultiple implements ShouldQueue
             }
 
             echo "ID ENVIO " . $envio->id . "\n";
+            echo "Terminando proceso de envio dte multiple " . $random_id . "\n";
         }
     }
 }
