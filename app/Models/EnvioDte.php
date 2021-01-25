@@ -151,7 +151,7 @@ class EnvioDte extends Model
     /*
      * Funcion para crear envios dte emitidos
      */
-    public static function empaquetarDtes(array $documentos, $contribuyente = 0, $boleta = 0)
+    public static function empaquetarDtes($documentos, $contribuyente = 0, $boleta = 0)
     {
         /* @var Documento $documento */
         /* @var Empresa $empresa */

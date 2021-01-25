@@ -1320,18 +1320,19 @@ class Sii
         }
     }
 
-    public function consultarEstadoDte($documento){
+    public function consultarEstadoDte($documento, $tokenSII = false){
 
         $boleta = 0;
         if($documento['tipo'] == 39 || $documento['tipo'] == 41){
             $boleta = 1;
         }
 
-        $tokenSII = false;
-        for ($i = 0; $i < $this->reintentos; $i++) {
-            $tokenSII = $this->obtenerToken($boleta);
-            if ($tokenSII !== false) {
-                break;
+        if($tokenSII === false){
+            for ($i = 0; $i < $this->reintentos; $i++) {
+                $tokenSII = $this->obtenerToken($boleta);
+                if ($tokenSII !== false) {
+                    break;
+                }
             }
         }
 

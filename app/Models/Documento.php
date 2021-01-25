@@ -1014,7 +1014,7 @@ class Documento extends Model
         return false;
     }
 
-    public function consultarEstadoSii()
+    public function consultarEstadoSii($token = false)
     {
         /* @var CertificadoEmpresa $certificado  */
         $certificado = $this->empresa->certificados()->where('enUso', 1)->first();
@@ -1031,7 +1031,7 @@ class Documento extends Model
             'monto' => (string) $this->totales->MntTotal
         ];
 
-        $data = $siiComponent->consultarEstadoDte($documento);
+        $data = $siiComponent->consultarEstadoDte($documento, $token);
 
         if(!in_array($this->idDoc->TipoDTE, [39,41])){
             $formato = str_replace('SII:', '', $data );
@@ -1043,7 +1043,7 @@ class Documento extends Model
             $this->save();
         }else{
             if(strpos($data->descripcion, "Documento Recibido por el SII") === false){
-                $this->glosaEstadoSii = 'DTE NoRecibido';
+                $this->glosaEstadoSii = 'DTE No Recibido';
             }else{
                 $this->glosaEstadoSii = 'DTE Recibido';
             }
