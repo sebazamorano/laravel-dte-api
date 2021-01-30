@@ -93,11 +93,8 @@ class DocumentoAPIController extends AppBaseController
                 }
 
                 $xml_string = $documento->generarDTE();
-
                 $xml = $documento->subirXmlDteS3($xml_string);
                 $documento->archivos()->attach($xml->id, ['tipo' => TipoArchivo::DTE]);
-
-                ProcesarEnvioDte::dispatch($documento->id);
             }
 
             //DB::rollBack();
