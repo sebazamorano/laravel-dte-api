@@ -29,6 +29,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('sii:update-ticket-information-ws')->everyFiveMinutes();
         $schedule->command('sii:generate-rcf')->dailyAt('01:40');
         $schedule->command('sii:read-emails')->everyMinute();
+        $schedule->command('sii:upload-tickets')->everyMinute();
     }
 
     /**
