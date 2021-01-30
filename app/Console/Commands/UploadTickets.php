@@ -63,7 +63,9 @@ class UploadTickets extends Command
                 ->limit(config('dte.max_quantity_packing'))
                 ->pluck('id');
 
-            ProcesarEnvioDteMultiple::dispatch($ids);
+            if(count($ids) > 0){
+                ProcesarEnvioDteMultiple::dispatch($ids);
+            }
         }
     }
 }
