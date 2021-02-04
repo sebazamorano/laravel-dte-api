@@ -9,6 +9,7 @@ use Freshwork\ChileanBundle\Rut;
 use Illuminate\Validation\Validator;
 use App\Models\ActividadEconomicaEmpresa;
 use App\Repositories\ActividadEconomicaRepository;
+use Illuminate\Validation\Rule;
 
 class CreateBoletaAPIRequest extends APIRequest
 {
@@ -120,7 +121,7 @@ class CreateBoletaAPIRequest extends APIRequest
             'dscRcgGlobal.*.ValorDR' => 'required|numeric',
             'dscRcgGlobal.*.IndExeDR' => 'nullable|integer',
             'idDoc' => 'required|array|min:1',
-            'idDoc.TipoDTE' => 'required|string|max:3',
+            'idDoc.TipoDTE' => ['required', 'string', 'max:3', Rule::in(['39', '41'])],
             'idDoc.Folio' => 'nullable|integer',
             'idDoc.FchEmis' => 'required|date_format:Y-m-d',
             'idDoc.IndNoRebaja' => 'nullable|integer',
