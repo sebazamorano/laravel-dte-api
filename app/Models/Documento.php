@@ -394,6 +394,10 @@ class Documento extends Model
                         $value = (int) round($value);
                     }
 
+                    if($this->idDoc->TipoDTE == 34 && in_array($index, ['TasaIVA', 'MntNeto', 'IVA'])){
+                        continue;
+                    }
+
                     $dte_documento->getEncabezado()->getTotales()->$set((string) $value);
                 }
             }
