@@ -223,9 +223,9 @@ class CreateDocumentoAPIRequest extends APIRequest
                 }
             }
 
-            if (isset($data['idDoc']['TipoDTE']) && $data['idDoc']['TipoDTE'] != 34 && $this->ind_exe_count == ($lin_det - 1)) {
+            if (isset($data['idDoc']['TipoDTE']) && !in_array($data['idDoc']['TipoDTE'], [34, 56, 61]) && $this->ind_exe_count == ($lin_det - 1)) {
                 $validator->errors()->add('detalle.*.IndExe',
-                    'IndExe = 1 solo puede estar presente en todas las lineas de detalle cuando el documento es Factura Exenta Electrónica');
+                    'IndExe = 1 solo puede estar presente en todas las lineas de detalle cuando el documento es Factura Exenta Electrónica, Nota de Crédito o Nota de débito');
             }
 
             if (count($data['detalle']) == 0 || count($data['detalle'][0]) == 0) {
