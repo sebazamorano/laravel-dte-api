@@ -348,12 +348,12 @@ class EnvioDte extends Model
             $email->destinatarios()->save($destinatario);
         }
 
-        if (App::environment('local')) {
-            $email->deliveredTo = 'joaquin.gamboaf@gmail.com';
+        if (App::environment(['local', 'staging', 'dev'])) {
+            $email->deliveredTo = config('dte.cron_mail');
             $destinatario = new EmailDestinatario();
             $destinatario->type = 1;
-            $destinatario->addressTo = 'joaquin.gamboaf@gmail.com';
-            $destinatario->displayTo = 'JOAQUIN GAMBOA FIGUEROA';
+            $destinatario->addressTo = config('dte.cron_mail');
+            $destinatario->displayTo = config('dte.cron_mail');
             $email->destinatarios()->save($destinatario);
         }
 
