@@ -936,8 +936,6 @@ class Sii
         $boundary = '--7d23e2a11301c4';
         $cuerpo = $this->multipart_build_query($data, $boundary, $xml_string, $file->file_name);
 
-        $url = ($this->ambiente == self::AMBIENTE_PRODUCCION) ? self::UploadProduccion : self::UploadCertificacion;
-
         /* @var $file File*/
         for ($i = 0; $i < $this->reintentos; $i++) {
             $tokenSII = $this->obtenerToken();
