@@ -33,7 +33,7 @@ class GuardarResultadoConsumoFolios implements ShouldQueue
     public function handle()
     {
         $xml = new \DOMDocument();
-        $xml->loadXML($this->xml_string);
+        $xml->loadXML(utf8_decode($this->xml_string));
         $consumoFolios = Xml::parseResultadoConsumoFolios($xml);
         FolioConsumption::saveResponse($consumoFolios);
     }

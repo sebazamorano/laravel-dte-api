@@ -106,13 +106,13 @@ class ProcessEmail
                     if($isXML){
                         switch ($tagName){
                             case 'RESULTADO_ENVIO':
-                                ProcesarResultadoEnvio::dispatch($xml->saveXML());
+                                ProcesarResultadoEnvio::dispatch(utf8_encode($xml->saveXML()));
                                 break;
                             case 'EnvioDTE':
                                 //exit();
                                 break;
                             case 'ResultadoConsumoFolios':
-                                GuardarResultadoConsumoFolios::dispatch($xml->saveXML());
+                                GuardarResultadoConsumoFolios::dispatch(utf8_encode($xml->saveXML()));
                                 break;
                             default:
                                 break;
