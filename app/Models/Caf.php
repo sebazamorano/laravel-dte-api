@@ -145,7 +145,7 @@ class Caf extends Model
         $input['fechaVencimiento'] = date('Y-m-d', strtotime('+6 months', strtotime($input['fa'])));
         $input['tipo_documento_id'] = \App\Components\TipoDocumento::getTipoDocumentoId($caf_data['td']);
 
-        if (! empty($input['folioActual']) && $input['folioActual'] != 0) {
+        if (! empty($input['folioActual']) && $input['folioActual'] > 0) {
             $input['folioUltimo'] = $input['folioActual'] - 1;
         } else {
             $input['folioUltimo'] = $input['folioDesde'] - 1;

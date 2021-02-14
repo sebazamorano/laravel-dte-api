@@ -61,6 +61,8 @@ class CafAPIController extends AppBaseController
         $input = $request->all();
 
         $caf_data = CAFComponent::leerCAF($request->file('caf')->path());
+        $caf_data['folioActual'] = $request->input('folioActual');
+
         $empresa = Empresa::where('rut', $caf_data['rut'])->first();
         Caf::verificarEmpresa($empresa_id, $empresa);
 

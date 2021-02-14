@@ -28,6 +28,7 @@ class CreateCafAPIRequest extends APIRequest
             'empresa_id' => 'required',
             'caf' => 'required|file|mimetypes:text/xml',
             'enUso' => 'required',
+            'folioActual' => 'nullable|sometimes|integer|min:1'
         ];
     }
 }
