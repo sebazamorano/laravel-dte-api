@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Components\Sii;
 use App\Models\EnvioDte;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
