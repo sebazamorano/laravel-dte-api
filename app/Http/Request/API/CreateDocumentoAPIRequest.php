@@ -479,11 +479,14 @@ class CreateDocumentoAPIRequest extends APIRequest
         $validator->after(function (Validator $validator) {
             $data = $validator->getData();
 
+            if(config('dte.amount_validator') == true){
+                $this->validarDetalle($data, $validator);
+                $this->validarDscRcg($data, $validator);
+                $this->validarTotales($data, $validator);
+            }
+
             $this->validarTipoDocumento($validator);
-            $this->validarDetalle($data, $validator);
-            $this->validarDscRcg($data, $validator);
             $this->validarRreferencia($data, $validator);
-            $this->validarTotales($data, $validator);
             $this->validarActividadesEconomicas($validator);
         });
     }
