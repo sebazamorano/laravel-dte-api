@@ -209,7 +209,7 @@ class CreateDocumentoAPIRequest extends APIRequest
                     $descuentoMonto = isset($value['DescuentoMonto']) ? $value['DescuentoMonto'] : 0;
                     $recargoMonto = isset($value['RecargoMonto']) ? $value['RecargoMonto'] : 0;
 
-                    $montoItem = ($qtyItem * $prcItem) - $descuentoMonto + $recargoMonto;
+                    $montoItem = round(($qtyItem * $prcItem) - $descuentoMonto + $recargoMonto);
 
                     isset($value['IndExe']) && $value['IndExe'] == 1 ? $this->monto_exento += $value['MontoItem'] : $this->monto_neto += $value['MontoItem'];
                     isset($value['IndExe']) && $value['IndExe'] == 1 ? $this->ind_exe_count++ : null;
