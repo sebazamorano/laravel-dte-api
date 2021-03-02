@@ -264,7 +264,7 @@ class CreateDocumentoAPIRequest extends APIRequest
                     }
 
                     if (isset($value['TpoMov']) && $value['TpoMov'] == 'D' && isset($value['IndExeDR']) && $value['IndExeDR'] == 1) {
-                        if (isset($value['TpoValaor']) && $value['TpoValor'] == '%') {
+                        if (isset($value['TpoValor']) && $value['TpoValor'] == '%') {
                             $this->monto_exento -= $this->monto_exento * ($valorDR / 100);
                         }
 
@@ -274,7 +274,7 @@ class CreateDocumentoAPIRequest extends APIRequest
                     }
 
                     if (isset($value['TpoMov']) && $value['TpoMov'] == 'R' && ! isset($value['IndExeDR'])) {
-                        if (isset($value['TpoValaor']) && $value['TpoValor'] == '%') {
+                        if (isset($value['TpoValor']) && $value['TpoValor'] == '%') {
                             $this->monto_neto += $this->monto_neto * ($valorDR / 100);
                         }
 
@@ -284,7 +284,7 @@ class CreateDocumentoAPIRequest extends APIRequest
                     }
 
                     if (isset($value['TpoMov']) && $value['TpoMov'] == 'R' && isset($value['IndExeDR']) && $value['IndExeDR'] == 1) {
-                        if (isset($value['TpoValaor']) && $value['TpoValor'] == '%') {
+                        if (isset($value['TpoValor']) && $value['TpoValor'] == '%') {
                             $this->monto_exento += $this->monto_exento * ($valorDR / 100);
                         }
 
