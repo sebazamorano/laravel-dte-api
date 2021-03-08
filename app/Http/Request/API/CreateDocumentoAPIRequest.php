@@ -102,6 +102,7 @@ class CreateDocumentoAPIRequest extends APIRequest
             'detalle.*.IndExe' => 'nullable|integer|between:0,6',
             'detalle.*.QtyItem' => 'nullable|numeric|required_with:detalle.*.PrcItem',
             'detalle.*.PrcItem' => 'nullable|numeric|required_with:detalle.*.QtyItem',
+            'detalle.*.DscItem' => 'nullable|sometimes|string|max:500',
             'detalle.*.DescuentoPct' => 'nullable|numeric|max:100',
             'detalle.*.DescuentoMonto' => 'nullable|numeric|required_with:detalle.*.DescuentoPct',
             'detalle.*.RecargoPct' => 'nullable|numeric|max:100',
@@ -254,7 +255,7 @@ class CreateDocumentoAPIRequest extends APIRequest
                     $valorDR = isset($value['ValorDR']) ? $value['ValorDR'] : 0;
 
                     if (isset($value['TpoMov']) && $value['TpoMov'] == 'D' && ! isset($value['IndExeDR'])) {
-                        if (isset($value['TpoValaor']) && $value['TpoValor'] == '%') {
+                        if (isset($value['TpoValor']) && $value['TpoValor'] == '%') {
                             $this->monto_neto -= $this->monto_neto * ($valorDR / 100);
                         }
 
