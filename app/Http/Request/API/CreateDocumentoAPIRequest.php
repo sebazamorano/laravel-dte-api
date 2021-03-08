@@ -245,7 +245,7 @@ class CreateDocumentoAPIRequest extends APIRequest
             }else{
                 foreach ($data['dscRcgGlobal'] as $index => $value) {
                     if (count($data['dscRcgGlobal'][$index]) == 0) {
-                        $validator->errors()->add('detalles.'.$index, 'las lineas de detalle no pueden ser vacias');
+                        $validator->errors()->add('dscRcgGlobal.'.$index, 'las lineas de DscRcg no pueden ser vacias');
                     }
 
                     if (isset($value['NroLinDR']) && $value['NroLinDR'] != $lin_dscrcg) {
