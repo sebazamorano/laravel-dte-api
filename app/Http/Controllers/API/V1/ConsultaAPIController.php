@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Controllers\AppBaseController;
 use App\Models\Documento;
 use App\Models\Empresa;
+use Freshwork\ChileanBundle\Rut;
 use Illuminate\Http\Request;
 
 class ConsultaAPIController extends AppBaseController
@@ -18,15 +19,25 @@ class ConsultaAPIController extends AppBaseController
             'monto' => 'required|integer'
         ]);
 
-        $empresa = Empresa::where('rut',  $request->input('rut'))->first();
+        $rut = Rut::parse($request->input('rut'))->format(Rut::FORMAT_WITH_DASH);
+
+        $empresa = Empresa::where('rut',  $rut)->first();
 
         if (empty($empresa)){
+            if(isset($request->html_response)){
+                abort(404);
+            }
+
             return $this->sendError('Empresa no encontrada en nuestros registros', 404);
         }
 
         $documento = Documento::buscar($request, $empresa->id)->first();
 
         if(!$documento){
+            if(isset($request->html_response)){
+                abort(404);
+            }
+
             return $this->sendError('Documento no encontrado en nuestros registros', 404);
         }
 

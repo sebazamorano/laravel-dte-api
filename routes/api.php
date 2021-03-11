@@ -18,7 +18,7 @@ Route::group(['middleware' => 'auth:api'], function() {
 });
 
 Route::group(['prefix' => 'v1'], function () {
-    Route::get('consulta/pdf', 'V1\ConsultaAPIController@pdf');
+    Route::get('consulta/pdf', 'V1\ConsultaAPIController@pdf')->name('consulta.pdf');
     Route::get('statistics', 'V1\StatisticAPIController@index');
     //Route::get('test', 'V1\TestAPIController@test');
 
