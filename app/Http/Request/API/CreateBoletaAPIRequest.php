@@ -267,7 +267,7 @@ class CreateBoletaAPIRequest extends APIRequest
                 $valorDR = isset($value['ValorDR']) ? $value['ValorDR'] : 0;
 
                 if (isset($value['TpoMov']) && $value['TpoMov'] == 'D' && ! isset($value['IndExeDR'])) {
-                    if (isset($value['TpoValaor']) && $value['TpoValor'] == '%') {
+                    if (isset($value['TpoValor']) && $value['TpoValor'] == '%') {
                         $this->monto_iva_incluido -= $this->monto_iva_incluido * ($valorDR / 100);
                     }
 
@@ -277,7 +277,7 @@ class CreateBoletaAPIRequest extends APIRequest
                 }
 
                 if (isset($value['TpoMov']) && $value['TpoMov'] == 'D' && isset($value['IndExeDR']) && $value['IndExeDR'] == 1) {
-                    if (isset($value['TpoValaor']) && $value['TpoValor'] == '%') {
+                    if (isset($value['TpoValor']) && $value['TpoValor'] == '%') {
                         $this->monto_exento -= $this->monto_exento * ($valorDR / 100);
                     }
 
@@ -287,7 +287,7 @@ class CreateBoletaAPIRequest extends APIRequest
                 }
 
                 if (isset($value['TpoMov']) && $value['TpoMov'] == 'R' && ! isset($value['IndExeDR'])) {
-                    if (isset($value['TpoValaor']) && $value['TpoValor'] == '%') {
+                    if (isset($value['TpoValor']) && $value['TpoValor'] == '%') {
                         $this->monto_iva_incluido += $this->monto_iva_incluido * ($valorDR / 100);
                     }
 
@@ -297,7 +297,7 @@ class CreateBoletaAPIRequest extends APIRequest
                 }
 
                 if (isset($value['TpoMov']) && $value['TpoMov'] == 'R' && isset($value['IndExeDR']) && $value['IndExeDR'] == 1) {
-                    if (isset($value['TpoValaor']) && $value['TpoValor'] == '%') {
+                    if (isset($value['TpoValor']) && $value['TpoValor'] == '%') {
                         $this->monto_exento += $this->monto_exento * ($valorDR / 100);
                     }
 
