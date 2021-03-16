@@ -14,3 +14,4 @@ Auth::routes(['register' => false]);
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/', 'HomeController@welcome')->name('welcome');
 Route::get('/consulta', 'ConsultaController@index')->name('consulta');
+Route::resource('empresas', 'EmpresaController');
