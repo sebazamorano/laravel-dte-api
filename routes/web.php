@@ -14,4 +14,14 @@ Auth::routes(['register' => false]);
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/', 'HomeController@welcome')->name('welcome');
 Route::get('/consulta', 'ConsultaController@index')->name('consulta');
-Route::resource('empresas', 'EmpresaController');
+
+Route::middleware(['auth', 'isSuperAdmin'])->group(function () {
+    Route::get('companies/{company}/documentosAutorizados', 'DocumentoAutorizadoController@edit')->name('documentosAutorizados.edit');
+    Route::patch('companies/{company}/documentosAutorizados', 'DocumentoAutorizadoController@update')->name('documentosAutorizados.update');
+    Route::resource('companies', 'EmpresaController');
+
+    Route::Resource('companies.branchOffices', 'SucursalController')
+        ->parameters(
+            ['branchOffices' => 'companyBranchOffices']
+        );
+});

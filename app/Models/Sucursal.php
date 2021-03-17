@@ -70,6 +70,26 @@ class Sucursal extends Model
         'ciudad' => 'max:20|required',
     ];
 
+    public static $labels = [
+        'id' => 'ID',
+        'name' => 'Nombre',
+        'region_id' => 'ID de region',
+        'province_id' => 'ID de provincia',
+        'municipality_id' => 'ID de municipalidad',
+        'region' => 'Region',
+        'province' => 'Provincia',
+        'municipality' => 'Comuna',
+        'api_id' => 'ID de API',
+        'type' => 'Tipo',
+        'sii_code' => 'Codigo del Sii',
+        'address' => 'Direccion',
+        'address_xml' => 'Direccion Xml',
+        'phone' => 'Telefono',
+        'created_at' => 'Fecha de creacion',
+        'updated_at' => 'Fecha de actualizacion',
+        'deleted_at' => 'Fecha de eliminacion',
+    ];
+
     /**
      * The data of the company that owns the sucursal.
      */

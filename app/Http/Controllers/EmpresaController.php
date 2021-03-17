@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Empresa;
+use Faker\Provider\Company;
 use Illuminate\Http\Request;
 
 class EmpresaController extends Controller
@@ -14,8 +15,8 @@ class EmpresaController extends Controller
      */
     public function index()
     {
-        $empresas = Empresa::all();
-        return view('empresas.index')->with(compact('empresas'));
+        $companies = Empresa::paginate();
+        return view('empresas.index')->with(compact('companies'));
     }
 
     /**
@@ -42,12 +43,12 @@ class EmpresaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param Empresa $empresa
+     * @param Empresa $company
      * @return \Illuminate\Http\Response
      */
-    public function show(Empresa $empresa)
+    public function show(Empresa $company)
     {
-        return view('empresas.show')->with(compact('empresa'));
+        return view('empresas.show')->with(['company' => $company, 'companyBranchOffices' => $company->companyBranchOffices]);
     }
 
     /**

@@ -11,11 +11,9 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-   .sass('resources/sass/app.scss', 'public/css')
-    .options({
-        postCss: [
-            tailwindcss('tailwind.js')
-        ],
-        processCssUrls: false,
-    });
+mix.js('resources/js/app.js', 'public/js').vue().extract(['vue', 'alpinejs'])
+   .sass('resources/sass/app.scss', 'public/css/boostrap.css')
+    .postCss("resources/css/app.css", "public/css", [
+        //require("tailwindcss"),
+        require("@tailwindcss/jit"),
+    ]);

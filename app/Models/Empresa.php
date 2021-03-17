@@ -139,6 +139,20 @@ class Empresa extends Model implements TenantContract
         'numeroResolucionBoleta' => 'integer',
     ];
 
+    public static $labels = [
+        'id' => 'ID',
+        'name' => 'Razón Social',
+        'fantasy_name' => 'Nombre Fantasia',
+        'identity_card' => 'RUT',
+        'phone' => 'Telefono',
+        'line' => 'Giro',
+        'client' => 'Cliente',
+        'provider' => 'Proveedor',
+        'created_at' => 'Fecha creación',
+        'updated_at' => 'Fecha actualización',
+        'deleted_at' => 'Fecha eliminación',
+    ];
+
     /**
      * The data of the comuna referenced to the company.
      */
@@ -169,6 +183,14 @@ class Empresa extends Model implements TenantContract
     public function sucursales()
     {
         return $this->hasMany(\App\Models\Sucursal::class);
+    }
+
+    /**
+     * obtener las sucursales de la empresa.
+     */
+    public function companyBranchOffices()
+    {
+        return $this->hasMany(\App\Models\Sucursal::class, 'empresa_id', 'id');
     }
 
     /**
