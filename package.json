@@ -22,13 +22,14 @@
         "postcss": "^8.2.8",
         "resolve-url-loader": "2.3.1",
         "sass": "^1.20.1",
-        "sass-loader": "7.*",
+        "sass-loader": "^ 8.0.2",
         "tailwindcss": "^2.0.3",
         "vue": "^2.5.17",
         "vue-loader": "^15.9.6",
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
-        "@fortawesome/fontawesome-free": "^5.15.3"
+        "@fortawesome/fontawesome-free": "^5.15.3",
+        "postcss-import": "^13.0.0"
     }
 }
