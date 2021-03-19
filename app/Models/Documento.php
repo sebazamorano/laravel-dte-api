@@ -475,7 +475,16 @@ class Documento extends Model
                 foreach ($referencia->getAttributes() as $index => $value) {
                     $set = 'set'.$index;
                     if (method_exists($referencia_xml, $set) && $value !== null) {
+                        if($index == 'TpoDocRef' && $value == 'SET' && $type == 3){
+                            continue;
+                        }
+
                         $referencia_xml->$set((string) $value);
+
+                        if ($index == 'CodRef' && $value == 0) {
+                            $referencia_xml->$set((string) 'SET');
+                        }
+
                     }
                 }
                 $dte_documento->setReferencia($referencia_xml);

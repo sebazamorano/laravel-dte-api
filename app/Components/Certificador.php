@@ -67,6 +67,7 @@ class Certificador
             [
                 'NroLinRef' => 1,
                 'TpoDocRef' => 'SET',
+                'CodRef' => 0,
                 'FolioRef' => '0',
                 'FchRef' => $fechaBoleta,
                 'RazonRef' => 'CASO-1',
@@ -100,6 +101,7 @@ class Certificador
             [
                 'NroLinRef' => 1,
                 'TpoDocRef' => 'SET',
+                'CodRef' => 0,
                 'FolioRef' => '0',
                 'FchRef' => $fechaBoleta,
                 'RazonRef' => 'CASO-2',
@@ -142,6 +144,7 @@ class Certificador
             [
                 'NroLinRef' => 1,
                 'TpoDocRef' => 'SET',
+                'CodRef' => 0,
                 'FolioRef' => '0',
                 'FchRef' => $fechaBoleta,
                 'RazonRef' => 'CASO-3',
@@ -185,6 +188,7 @@ class Certificador
             [
                 'NroLinRef' => 1,
                 'TpoDocRef' => 'SET',
+                'CodRef' => 0,
                 'FolioRef' => '0',
                 'FchRef' => $fechaBoleta,
                 'RazonRef' => 'CASO-4',
@@ -219,6 +223,7 @@ class Certificador
             [
                 'NroLinRef' => 1,
                 'TpoDocRef' => 'SET',
+                'CodRef' => 0,
                 'FolioRef' => '0',
                 'FchRef' => $fechaBoleta,
                 'RazonRef' => 'CASO-5',
@@ -273,6 +278,7 @@ class Certificador
             [
                 'NroLinRef' => 1,
                 'TpoDocRef' => 'SET',
+                'CodRef' => 0,
                 'FolioRef' => '0',
                 'FchRef' => $fechaBoleta,
                 'RazonRef' => 'CASO-1',
@@ -307,6 +313,7 @@ class Certificador
             [
                 'NroLinRef' => 1,
                 'TpoDocRef' => 'SET',
+                'CodRef' => 0,
                 'FolioRef' => '0',
                 'FchRef' => $fechaBoleta,
                 'RazonRef' => 'CASO-2',
@@ -350,6 +357,7 @@ class Certificador
             [
                 'NroLinRef' => 1,
                 'TpoDocRef' => 'SET',
+                'CodRef' => 0,
                 'FolioRef' => '0',
                 'FchRef' => $fechaBoleta,
                 'RazonRef' => 'CASO-3',
@@ -381,6 +389,7 @@ class Certificador
 
     public function crearBoleta($input, $fecha, $company)
     {
+        /* @var Documento $documento */
         $input['empresa_id'] = $company->id;
         $input['fechaEmision'] = $fecha;
         $input['idDoc']['FchEmis'] = $fecha;
