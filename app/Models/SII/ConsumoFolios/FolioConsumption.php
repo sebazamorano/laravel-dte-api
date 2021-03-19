@@ -10,6 +10,8 @@ use App\File;
 use App\Mail\Information;
 use App\Models\CertificadoEmpresa;
 use App\Models\Documento;
+use App\Models\Email;
+use App\Models\EmailDestinatario;
 use App\Models\Empresa;
 use Carbon\Carbon;
 use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
@@ -203,7 +205,7 @@ class FolioConsumption extends Model
         return $this->hasMany(FolioConsumptionSummary::class, 'sii_folio_consumption_id');
     }
 
-    public static function createInfo($empresa_id, $date, $secEnvio = 1)
+    public static function createInfo($empresa_id, $date, $secEnvio = 1, $certificacion = false, $ids = null)
     {
         /* @var $model FolioConsumption*/
         /* @var $emisor Empresa*/
@@ -259,9 +261,13 @@ class FolioConsumption extends Model
             ->groupBy(
                 'tipo_documento_id',
                 'fechaEmision'
-            )
-            ->get();
+            );
 
+        if($certificacion){
+            $documentos = $documentos->whereIn('id', $ids);
+        }
+
+        $documentos = $documentos->get();
         if($model->save()){
             if($documentos->count() > 0){
                 foreach($documentos as $resumen_documento){
@@ -282,9 +288,13 @@ class FolioConsumption extends Model
                         ::where('IO', 0)
                         ->where('fechaEmision', $date)
                         ->where('empresa_id', $empresa_id)
-                        ->where('tipo_documento_id', $resumen_documento->tipo_documento_id)
-                        ->pluck('folio')
-                        ->all();
+                        ->where('tipo_documento_id', $resumen_documento->tipo_documento_id);
+
+                    if($certificacion){
+                        $folios = $folios->whereIn('id', $ids);
+                    }
+
+                    $folios = $folios->pluck('folio')->all();
 
                     $collection = collect($folios);
                     $sorted_folios = $collection->sort()->values()->all();
@@ -346,5 +356,37 @@ class FolioConsumption extends Model
             unset($data['glosa']);
             self::where($data)->update(['glosa' => $glosa]);
         }
+    }
+
+    public function crearCorreoCertificacion($file_id)
+    {
+        $email_address = config('dte.certification_email');
+        $email = new Email();
+        $email->empresa_id = $this->empresa_id;
+        $email->IO = 0;
+        $email->bandeja = 2;
+        $email->addressFrom = $this->empresa->contactoEmpresas;
+        $email->displayFrom = $this->empresa->razonSocial;
+        $email->fecha = Carbon::now()->format('Y-m-d H:i:s');
+        $email->subject = 'ENVIO XML RCF CERTIFICACION';
+        $email->save();
+
+        $archivo = $this->files()->where('files.id', $file_id)->latest()->first();
+        $email->adjuntos()->attach($archivo->id);
+
+        $email->deliveredTo = $email_address;
+        $destinatario = new EmailDestinatario();
+        $destinatario->type = 1;
+        $destinatario->addressTo = $email_address;
+        $destinatario->displayTo = $email_address;
+        $email->destinatarios()->save($destinatario);
+
+        $body = '';
+        $body .= '<br><br>SE ADJUNTA XML RCF. ESTE XML DEBE SUBIRLO AL SII.';
+        $email->html = $body;
+
+        $email->update();
+
+        return $email->id;
     }
 }

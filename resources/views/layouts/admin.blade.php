@@ -16,13 +16,9 @@
     />
     <link
         rel="stylesheet"
-        href="/vendor/@fortawesome/fontawesome-free/css/all.min.css"
-    />
-    <link
-        rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/creativetimofficial/tailwind-starter-kit/compiled-tailwind.min.css"
     />
-
+    <link href="{{ mix('css/fontawesome.css') }}" rel="stylesheet">
     <!-- Fonts -->
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 

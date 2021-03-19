@@ -85,6 +85,7 @@ class Documento extends Model
     const FORMATO_TIMBRE = 'Y-m-d\TH:i:s';
 
     public $fillable = [
+        'sucursal_id',
         'empresa_id',
         'tipo_documento_id',
         'entidad_id',
@@ -335,7 +336,7 @@ class Documento extends Model
             $dte_documento->getEncabezado()->setEmisor();
             foreach ($this->emisor->getAttributes() as $index => $value) {
                 $set = 'set'.$index;
-                if (method_exists($dte_documento->getEncabezado()->getEmisor(), $set) && $value !== null) {
+                if (method_exists($dte_documento->getEncabezado()->getEmisor(), $set) && $value !== null && $value !== '') {
                     $dte_documento->getEncabezado()->getEmisor()->$set((string) $value);
                 }
             }
@@ -682,6 +683,7 @@ class Documento extends Model
             $sucursal = $empresa->sucursales()->where('tipo', 1)->first();
         }
 
+        $input['sucursal_id'] = $sucursal->id;
         $input['emisor']['DirOrigen'] = $sucursal->direccionXml;
         $input['emisor']['CmnaOrigen'] = $sucursal->comuna;
         $input['emisor']['CiudadOrigen'] = $sucursal->ciudad;

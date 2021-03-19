@@ -29,6 +29,7 @@
                             <table class="items-center w-full bg-transparent border-collapse">
                                 <thead>
                                 <tr>
+                                    @if(App::environment(['local', 'staging', 'dev']))<th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Certificación</th>@endif
                                     <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">@lang('models/companies.fields.name')</th>
                                     <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">@lang('models/companies.fields.identity_card')</th>
                                     <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">@lang('models/companies.fields.line')</th>
@@ -38,6 +39,11 @@
                                 <tbody>
                                 @foreach($companies as $company)
                                     <tr>
+                                        @if(App::environment(['local', 'staging', 'dev']))
+                                            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                                <a href="{{ route('certificacion.index', [$company->id]) }}" class="text-black hover:text-black underline ml-2"><svg class="h-4 w-4 fill-current text-black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.3 3.7l4 4L4 20H0v-4L12.3 3.7zm1.4-1.4L16 0l4 4-2.3 2.3-4-4z"/></svg></a>
+                                            </td>
+                                        @endif
                                         <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">{{ $company->razonSocial }}</td>
                                         <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">{{ $company->rut }}</td>
                                         <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">{{ $company->giro }}</td>

@@ -135,6 +135,7 @@
 /******/ 		var installedChunks = {
 /******/ 			"/js/manifest": 0,
 /******/ 			"css/boostrap": 0,
+/******/ 			"css/fontawesome": 0,
 /******/ 			"css/app": 0
 /******/ 		};
 /******/ 		

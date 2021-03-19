@@ -2,6 +2,7 @@
     "/js/app.js": "/js/app.js",
     "/js/manifest.js": "/js/manifest.js",
     "/css/boostrap.css": "/css/boostrap.css",
+    "/css/fontawesome.css": "/css/fontawesome.css",
     "/css/app.css": "/css/app.css",
     "/js/vendor.js": "/js/vendor.js"
 }

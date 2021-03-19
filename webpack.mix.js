@@ -12,8 +12,9 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js').vue().extract(['vue', 'alpinejs'])
-   .sass('resources/sass/app.scss', 'public/css/boostrap.css')
+    .sass('resources/sass/fontawesome.scss', 'public/css/fontawesome.css')
+    .sass('resources/sass/app.scss', 'public/css/boostrap.css')
     .postCss("resources/css/app.css", "public/css", [
-        //require("tailwindcss"),
-        require("@tailwindcss/jit"),
+        require("tailwindcss"),
+        //require("@tailwindcss/jit"),
     ]);

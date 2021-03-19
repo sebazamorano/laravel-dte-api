@@ -11,4 +11,5 @@ return [
     'mail_reception_host' => env('DTE_MAIL_RECEPTION_HOST', ''),
     'mail_reception_port' => env('DTE_MAIL_RECEPTION_PORT', '993'),
     'amount_validator' => env('DTE_AMOUNT_VALIDATOR', true),
+    'certification_email' => env('DTE_CERTIFICATION_EMAIL', ''),
 ];
