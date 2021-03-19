@@ -43,4 +43,9 @@ class Comuna extends Model
         'provincia_id' => 'required|exists:provincias,id',
         'nombre' => 'max:60|required',
     ];
+
+    public function provincia()
+    {
+        return $this->belongsTo(Provincia::class);
+    }
 }

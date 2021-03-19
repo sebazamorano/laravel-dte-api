@@ -26,7 +26,7 @@ class TipoDocumento extends Model
 
     public $fillable = [
         'empresa_id',
-        'nombreDocumento',
+        'nombre',
         'tipoDTE',
         'noAplica',
         'nombreEnLibro',
@@ -40,7 +40,7 @@ class TipoDocumento extends Model
      */
     protected $casts = [
         'empresa_id' => 'integer',
-        'nombreDocumento' => 'string',
+        'nombre' => 'string',
         'tipoDTE' => 'string',
         'nombreEnLibro' => 'string',
         'xml' => 'boolean',
@@ -52,7 +52,7 @@ class TipoDocumento extends Model
      * @var array
      */
     public static $rules = [
-        'nombreDocumento' => 'max:100|required',
+        'nombre' => 'max:100|required',
         'tipoDTE' => 'max:3|required',
         'nombreEnLibro' => 'max:100',
         'xml' => 'boolean',

@@ -43,4 +43,9 @@ class Provincia extends Model
         'region_id' => 'required|exists:region,id',
         'nombre' => 'max:60|required',
     ];
+
+    public function region()
+    {
+        return $this->belongsTo(Region::class);
+    }
 }

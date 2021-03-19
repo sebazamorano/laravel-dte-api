@@ -15,15 +15,18 @@ class ProcesarEnvioDteMultiple implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     private $ids;
+    private $certificacion;
 
     /**
      * Create a new job instance.
      *
      * @param $ids
+     * @param bool $certificacion
      */
-    public function __construct($ids)
+    public function __construct($ids, $certificacion = false)
     {
         $this->ids = $ids;
+        $this->certificacion = $certificacion;
     }
 
     /**
@@ -56,11 +59,21 @@ class ProcesarEnvioDteMultiple implements ShouldQueue
             $xml_string = $envio->generarXML();
             $file = $envio->subirXmlS3($xml_string);
             $envio->archivos()->attach($file->id);
-            $envio->subirAllSii();
-            \App\Models\Documento::whereIn('id', $this->ids)->update(['glosaEstadoSii' => 'DTE Enviado Multiple']);
 
-            if($boleta == 1){
+            if($this->certificacion == false){
+                $envio->subirAllSii();
+                \App\Models\Documento::whereIn('id', $this->ids)->update(['glosaEstadoSii' => 'DTE Enviado Multiple']);
+            }else{
+                \App\Models\Documento::whereIn('id', $this->ids)->update(['glosaEstadoSii' => 'CERTIFICACION']);
+            }
+
+            if($boleta == 1 && $this->certificacion == false){
                 ConsultarEstadoEnvioSii::dispatch($envio->id)->delay(Carbon::now()->addMinutes(1));
+            }
+
+            if($this->certificacion){
+                $email_id = $envio->crearCorreoCertificacion();
+                EnviarEnvioDteAlReceptor::dispatch($email_id);
             }
 
             echo "ID ENVIO " . $envio->id . "\n";

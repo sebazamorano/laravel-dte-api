@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\File;
 use App\Mail\Information;
+use App\Models\SII\EconomicActivity;
 use App\Role;
 use App\Traits\TenantBase;
 use Illuminate\Database\Eloquent\Model;
@@ -139,6 +140,20 @@ class Empresa extends Model implements TenantContract
         'numeroResolucionBoleta' => 'integer',
     ];
 
+    public static $labels = [
+        'id' => 'ID',
+        'name' => 'Razón Social',
+        'fantasy_name' => 'Nombre Fantasia',
+        'identity_card' => 'RUT',
+        'phone' => 'Telefono',
+        'line' => 'Giro',
+        'client' => 'Cliente',
+        'provider' => 'Proveedor',
+        'created_at' => 'Fecha creación',
+        'updated_at' => 'Fecha actualización',
+        'deleted_at' => 'Fecha eliminación',
+    ];
+
     /**
      * The data of the comuna referenced to the company.
      */
@@ -169,6 +184,14 @@ class Empresa extends Model implements TenantContract
     public function sucursales()
     {
         return $this->hasMany(\App\Models\Sucursal::class);
+    }
+
+    /**
+     * obtener las sucursales de la empresa.
+     */
+    public function companyBranchOffices()
+    {
+        return $this->hasMany(\App\Models\Sucursal::class, 'empresa_id', 'id');
     }
 
     /**
@@ -232,21 +255,31 @@ class Empresa extends Model implements TenantContract
     public static function parseCertificado(Request $request)
     {
         if (! self::verificarFormatoCertificado($request)) {
-            throw new HttpResponseException(response()->json([
-                'message' => '422 error',
-                'errors' => ['original'=>['original debe ser un archivo con formato : p12, pfx.']],
-                'status_code' => 422,
-            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY));
+            if($request->route()->getName() == 'certificadosDigitales.upload'){
+                request()->session()->flash('error-message', ['El certificado debe ser un archivo con formato : p12, pfx.']);
+                return false;
+            }else{
+                throw new HttpResponseException(response()->json([
+                    'message' => '422 error',
+                    'errors' => ['original'=>['original debe ser un archivo con formato : p12, pfx.']],
+                    'status_code' => 422,
+                ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY));
+            }
         }
 
         $p12worked = openssl_pkcs12_read(file_get_contents($request->file('original')->getPathname()), $p12, $request->password);
 
         if (! self::contrasenaCertificadoEsValida($p12worked)) {
-            throw new HttpResponseException(response()->json([
-                'message' => '422 error',
-                'errors' => ['original'=>['No se puede leer el almacén de certificados', openssl_error_string()]],
-                'status_code' => 422,
-            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY));
+            if($request->route()->getName() == 'certificadosDigitales.upload'){
+                request()->session()->flash('error-message', ['Error en la clave del certificado digital']);
+                return false;
+            }else{
+                throw new HttpResponseException(response()->json([
+                    'message' => '422 error',
+                    'errors' => ['original'=>['No se puede leer el almacén de certificados', openssl_error_string()]],
+                    'status_code' => 422,
+                ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY));
+            }
         }
 
         return $p12;
@@ -346,5 +379,50 @@ class Empresa extends Model implements TenantContract
         }
 
         return $certificado;
+    }
+
+    public static function crearEmpresaDesdeSiiData($company_data)
+    {
+        $comuna  = Comuna::where('nombre', 'LIKE', $company_data['comuna'])->first();
+
+        $input = [
+            'razonSocial' => $company_data['nombre'],
+            'rut' => $company_data['rut'],
+            'giro' => $company_data['glosa'],
+            'direccion' => $company_data['direccion'],
+            'region_id' => $comuna->provincia->region->id,
+            'provincia_id' => $comuna->provincia->id,
+            'comuna_id' => $comuna->id
+        ];
+        $empresa  = Empresa::create($input);
+
+        $sucursal = Sucursal::updateOrCreate(
+            [
+                'empresa_id' => $empresa->id,
+                'direccion' => $company_data['direccion']
+            ],
+            [
+                'empresa_id' => $empresa->id,
+                'nombre' => 'CASA MATRIZ',
+                'comuna' => $company_data['comuna'],
+                'ciudad' => isset($company_data['ciudad']) ? $company_data['ciudad'] : $company_data['comuna'],
+                'tipo' => 1,
+                'direccion' => $company_data['direccion'],
+                'direccionXml' => $company_data['direccion'],
+            ]
+        );
+
+
+        foreach($company_data['actividades_economicas'] as $actividad){
+            $actividadEconomica = ActividadEconomica::where('codigo', $actividad['codigo'])->first();
+
+            if(!$actividadEconomica){
+                continue;
+            }
+
+            $empresa->actividadesEconomicasEmpresas()->toggle([$actividadEconomica->id]);
+        }
+
+        return $empresa;
     }
 }

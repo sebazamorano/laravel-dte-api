@@ -92,7 +92,7 @@ class File extends Model
         return $file;
     }
 
-    public static function uploadFileFromRequest(Request $request, $nombreInput = '', $type = 'main'): self
+    public static function uploadFileFromRequest(Request $request, $nombreInput = '', $type = 'main', $company = null): self
     {
         /* @var Empresa $empresa */
         $file = $request->file($nombreInput);
@@ -101,15 +101,20 @@ class File extends Model
         //$filename = uniqid() .  '.' . $extension;
         $mimeType = $request->file($nombreInput)->getClientMimeType();
         $fileSize = $request->file($nombreInput)->getClientSize();
-        $empresa_id = $request->input('empresa_id');
-        $empresa = Empresa::find($empresa_id);
+
+        if($company == null){
+            $empresa_id = $request->input('empresa_id');
+            $empresa = Empresa::find($empresa_id);
+        }else{
+            $empresa = $company;
+        }
+        
         $nombreArchivo = $request->$nombreInput->getClientOriginalName();
-        // generate the thumb and medium image
 
         Storage::cloud()->put("{$empresa->rut}/{$type}/".$path, file_get_contents($file), 'private');
         // make image entry to DB
         $file = self::create([
-            'empresa_id' => $empresa_id,
+            'empresa_id' => $empresa->id,
             'file_name' => $nombreArchivo,
             'mime_type' => $mimeType,
             'file_size' => $fileSize,

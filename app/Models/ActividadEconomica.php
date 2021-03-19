@@ -43,4 +43,13 @@ class ActividadEconomica extends Model
         'codigo' => 'required',
         'descripcion' => 'max:200|required',
     ];
+
+    public static $labels = [
+        'id' => 'Id',
+        'code' => 'Codigo',
+        'description' => 'Descripcion',
+        'created_at' => 'Fecha de Creacion',
+        'updated_at' => 'Fecha de Actualizacion',
+        'deleted_at' => 'Fecha de Elminacion',
+    ];
 }

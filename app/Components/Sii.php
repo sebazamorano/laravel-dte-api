@@ -12,6 +12,7 @@ use Freshwork\ChileanBundle\Exceptions\InvalidFormatException;
 use Freshwork\ChileanBundle\Rut;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
 use App\Models\CertificadoEmpresa;
 use Illuminate\Support\Facades\Log;
@@ -1442,5 +1443,126 @@ class Sii
             $contents = json_decode($request->getBody()->getContents());
             return $contents;
         }
+    }
+
+    public function downloadCompanyData($rut, $path, $cookieJar)
+    {
+        $identity_card = self::splitRutOnTwo($rut);
+        $url = "https://maullin.sii.cl/cvc_cgi/dte/ce_consulta_muestra_e_dwnld?&NOMBRE_ARCHIVO=ce_consulta_muestra_e_dwnld_{$rut}.csv&RUT_EMP={$identity_card['rutEmisor']}&DV_EMP={$identity_card['dvEmisor']}";
+
+        $client = new \GuzzleHttp\Client();
+        $resource = fopen($path, 'w');
+
+        try {
+            $response = $client->get($url, [
+                'headers' => [
+                    'User-Agent' => self::USER_AGENT,
+                ],
+                'sink' => $resource,
+                'cookies' => $cookieJar,
+            ]);
+
+            return true;
+        } catch (GuzzleException $e) {
+            return false;
+        }
+    }
+
+    public static function transformCsvCompanyDataToArray($path)
+    {
+        $fila = 1;
+        $a = "Actividades Económicas:";
+        $b = "Actividades Econ?micas:";
+        $posc_glosa = 0;
+        $posc_region = 0;
+        $posc_actividades = 0;
+        $direccion = '';
+        $ciudad = '';
+        $comuna = '';
+        $glosa = '';
+        $actividades = [];
+        $rut = '';
+        $nombre = '';
+        $resultado = '';
+
+        $data = fopen($path, 'r');
+        while (($datos = fgetcsv($data, 100, ";")) !== FALSE) {
+            $numero = count($datos);
+            $fila++;
+
+            for ($c=0; $c < $numero; $c++) {
+
+                $resultado = substr($datos[$c], 0, 7);
+
+                if  ($fila == 3) {
+                    $rut = $datos[$c];
+                }
+
+                if  ($fila == 6) {
+                    $nombre = $datos[$c];
+                }
+
+                if  ($fila == 9 ) {
+                    $direccion_array = explode(',', $datos[$c]);
+
+                    foreach($direccion_array as $part){
+                        $ciudad_comuna = substr( $part, 0, 8 );
+
+                        if  ( !in_array( $ciudad_comuna, [' Ciudad ', ' Comuna '] ) ) {
+                            if($direccion == ''){
+                                $direccion = trim($part);
+                            }else{
+                                $direccion = $direccion . ',' .  $part;
+                            }
+                        }else{
+                            $final_data = substr($part, 8, 20);
+
+                            if($ciudad_comuna == ' Comuna ') {
+                                $comuna = $final_data;
+                            }
+
+                            if($ciudad_comuna == ' Ciudad ') {
+                                $ciudad = $final_data;
+                            }
+                        }
+                    }
+                    $posc_region = $fila+3;
+                }
+
+                if  ($fila == $posc_region) {
+                    $region = $datos[$c];
+                }
+
+                if  ($resultado == "Glosa D") {
+                    $posc_glosa = $fila + 1;
+                }
+
+                if  ($fila == $posc_glosa) {
+                    $glosa = trim($datos[$c]);
+                }
+
+                if  (utf8_encode($datos[$c]) == $a || $datos[$c] == $b) {
+                    $posc_actividades = $fila + 2;
+                }
+
+                if  ($posc_glosa == null && $fila == $posc_actividades && $datos[$c] != null){
+                    array_push($actividades, ['codigo' => $datos[0], 'descripcion'=> $datos[1]]);
+                    $posc_actividades = $posc_actividades +1;
+                }
+            }
+        }
+
+        fclose($data);
+
+        return [
+            'rut' => $rut,
+            'nombre' => $nombre,
+            'direccion' => $direccion ?? null,
+            'direccion_regional' => $region ?? null,
+            'comuna'=> $comuna ?? null,
+            'ciudad'=> $ciudad ?? null,
+            'glosa' => $glosa ?? $resultado,
+            'actividades_economicas' => $actividades
+        ];
     }
 }

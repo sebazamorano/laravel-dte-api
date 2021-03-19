@@ -320,7 +320,39 @@ class EnvioDte extends Model
         return $this->belongsToMany(\App\Models\Email::class);
     }
 
-    public function crearEmail()
+    public function crearCorreoCertificacion()
+    {
+        $email_address = config('dte.certification_email');
+        $email = new Email();
+        $email->empresa_id = $this->empresa_id;
+        $email->IO = 0;
+        $email->bandeja = 2;
+        $email->addressFrom = $this->empresa->contactoEmpresas;
+        $email->displayFrom = $this->empresa->razonSocial;
+        $email->fecha = Carbon::now()->format('Y-m-d H:i:s');
+        $email->subject = 'ENVIO XML CERTIFICACION';
+        $email->save();
+
+        $archivo = $this->archivos()->latest()->first();
+        $email->adjuntos()->attach($archivo->id);
+
+        $email->deliveredTo = $email_address;
+        $destinatario = new EmailDestinatario();
+        $destinatario->type = 1;
+        $destinatario->addressTo = $email_address;
+        $destinatario->displayTo = $email_address;
+        $email->destinatarios()->save($destinatario);
+
+        $body = '';
+        $body .= '<br><br>SE ADJUNTA XML ENVIO DTE. ESTE XML DEBE SUBIRLO AL SII.';
+        $email->html = $body;
+
+        $email->update();
+
+        return $email->id;
+    }
+
+    public function crearEmail($email_address = null)
     {
         /* @var Contribuyente $contribuyente */
 
@@ -349,12 +381,21 @@ class EnvioDte extends Model
         }
 
         if (App::environment(['local', 'staging', 'dev'])) {
-            $email->deliveredTo = config('dte.cron_mail');
-            $destinatario = new EmailDestinatario();
-            $destinatario->type = 1;
-            $destinatario->addressTo = config('dte.cron_mail');
-            $destinatario->displayTo = config('dte.cron_mail');
-            $email->destinatarios()->save($destinatario);
+            if($email_address !== null){
+                $email->deliveredTo = $email_address;
+                $destinatario = new EmailDestinatario();
+                $destinatario->type = 1;
+                $destinatario->addressTo = $email_address;
+                $destinatario->displayTo = $email_address;
+                $email->destinatarios()->save($destinatario);
+            }else{
+                $email->deliveredTo = config('dte.cron_mail');
+                $destinatario = new EmailDestinatario();
+                $destinatario->type = 1;
+                $destinatario->addressTo = config('dte.cron_mail');
+                $destinatario->displayTo = config('dte.cron_mail');
+                $email->destinatarios()->save($destinatario);
+            }
         }
 
         $body = '';
