@@ -63,6 +63,8 @@ class ProcesarEnvioDteMultiple implements ShouldQueue
             if($this->certificacion == false){
                 $envio->subirAllSii();
                 \App\Models\Documento::whereIn('id', $this->ids)->update(['glosaEstadoSii' => 'DTE Enviado Multiple']);
+            }else{
+                \App\Models\Documento::whereIn('id', $this->ids)->update(['glosaEstadoSii' => 'CERTIFICACION']);
             }
 
             if($boleta == 1 && $this->certificacion == false){
