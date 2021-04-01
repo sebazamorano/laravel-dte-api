@@ -386,9 +386,9 @@ class Empresa extends Model implements TenantContract
         $comuna  = Comuna::where('nombre', 'LIKE', $company_data['comuna'])->first();
 
         $input = [
-            'razonSocial' => $company_data['nombre'],
+            'razonSocial' => utf8_encode($company_data['nombre']),
             'rut' => $company_data['rut'],
-            'giro' => $company_data['glosa'],
+            'giro' => utf8_encode($company_data['glosa']),
             'direccion' => $company_data['direccion'],
             'region_id' => $comuna->provincia->region->id,
             'provincia_id' => $comuna->provincia->id,
