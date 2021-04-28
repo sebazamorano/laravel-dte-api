@@ -99,6 +99,8 @@ class RoutePermission
         'api.acceptance_claims.destroy' => 'borrar aceptacion/reclamos',
         'api.archivos.descargar' => 'descargar archivos',
         'api.empresas.subirLogo' => 'subir logo empresa',
+        'api.documentos.xml' => 'descargar archivos',
+        'api.documentos.xml_envio' => 'descargar archivos',
     ];
 
     public static function getPermission($route)

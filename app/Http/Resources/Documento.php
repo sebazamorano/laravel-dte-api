@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Components\TipoArchivo;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class Documento extends JsonResource
@@ -16,7 +17,7 @@ class Documento extends JsonResource
     {
         $array = parent::toArray($request);
 
-        $array['file'] = $this->file;
+        $array['file'] = $this->archivos()->wherePivot('tipo', TipoArchivo::DTE)->latest()->first();
         $array['idDoc'] = $this->idDoc;
         $array['actividadesEconomicas'] = $this->actividadesEconomicas;
         $array['dscRcgGlobal'] = $this->dscRcgGlobal;

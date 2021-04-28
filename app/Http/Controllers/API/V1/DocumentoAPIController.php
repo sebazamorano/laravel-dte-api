@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Response;
 use App\Models\Documento;
@@ -260,7 +261,6 @@ class DocumentoAPIController extends AppBaseController
      */
     public function pdf(APIRequest $request, $id, $empresa_id)
     {
-
         $this->validate($request, [
             'formato_hoja' => 'sometimes',
             Rule::in(['carta', 'termico'])
@@ -310,5 +310,59 @@ class DocumentoAPIController extends AppBaseController
         SendEmailJob::dispatch($email_id, $documento);
 
         return $this->sendResponse([], '');
+    }
+
+    public function xml(APIRequest $request, $id, $empresa_id)
+    {
+        /** @var Documento $documento */
+        $documento = Documento::where('empresa_id', $empresa_id)->find($id);
+
+        if (empty($documento)) {
+            return $this->sendError('Documento no encontrado');
+        }
+
+        $xml_file = $documento->archivos()->wherePivot('tipo', TipoArchivo::DTE)->latest()->first();
+        $xml = Storage::cloud()->get($xml_file->file_path);
+
+        if($request->filled('responseType') && $request->input('responseType') == 'base64'){
+            return $this->sendResponse(['file' => base64_encode($xml)], 'XML Obtenido');
+        }else{
+            return new \Illuminate\Http\Response($xml, 200, array(
+                'Content-Type' => 'application/xml',
+                'X-Vapor-Base64-Encode' => 'True',
+                'Content-Disposition' =>  'attachment; filename="document.xml"',
+                'Content-Length' => strlen($xml),
+            ));
+        }
+    }
+
+    public function xmlEnvio(APIRequest $request, $id, $empresa_id)
+    {
+        /** @var Documento $documento */
+        $documento = Documento::where('empresa_id', $empresa_id)->find($id);
+
+        if (empty($documento)) {
+            return $this->sendError('Documento no encontrado');
+        }
+
+        $envio = $documento->envios()->where('envios_dtes.contribuyente', 1)->latest()->first();
+
+        if(empty($envio)){
+            return $this->sendError('El documento no posee un envio contribuyente');
+        }
+
+        $xml_file = $envio->archivos()->latest()->first();
+        $xml = Storage::cloud()->get($xml_file->file_path);
+
+        if($request->filled('responseType') && $request->input('responseType') == 'base64'){
+            return $this->sendResponse(['file' => base64_encode($xml)], 'XML Obtenido');
+        }else{
+            return new \Illuminate\Http\Response($xml, 200, array(
+                'Content-Type' => 'application/xml',
+                'X-Vapor-Base64-Encode' => 'True',
+                'Content-Disposition' =>  'attachment; filename="envio.xml"',
+                'Content-Length' => strlen($xml),
+            ));
+        }
     }
 }
