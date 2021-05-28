@@ -30,6 +30,8 @@ class UpdateCompanyControllerRequest extends FormRequest
             'numeroResolucion' => 'nullable|sometimes|integer',
             'fechaResolucionBoleta' => 'nullable|sometimes|date',
             'numeroResolucionBoleta' => 'nullable|sometimes|integer',
+            'contactoSii' => 'nullable|sometimes|email',
+            'contactoEmpresas' => 'nullable|sometimes|email',
         ];
     }
 }
