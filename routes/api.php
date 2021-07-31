@@ -80,6 +80,9 @@ Route::group(['prefix' => 'v1'], function () {
         Route::delete('documentos/{documento}/empresa/{empresa_id}', 'V1\DocumentoAPIController@destroy')->name('documentos.destroy');
         Route::get('documentos/{id}/empresa/{empresa_id}/sendPDF', 'V1\DocumentoAPIController@sendPDF')->name('documentos.sendPDF');
         Route::get('documentos/{id}/empresa/{empresa_id}/pdf', 'V1\DocumentoAPIController@pdf')->name('documentos.pdf');
+        Route::get('documentos/{id}/empresa/{empresa_id}/xml', 'V1\DocumentoAPIController@xml')->name('documentos.xml');
+        Route::get('documentos/{id}/empresa/{empresa_id}/xmlEnvio', 'V1\DocumentoAPIController@xmlEnvio')->name('documentos.xml_envio');
+        Route::get('documentos/empresa/{empresa_id}/{documento}', 'V1\DocumentoAPIController@consultarEstadoSii')->name('documentos.consultar_estado_sii');
 
         Route::get('tickets/{id}/empresa/{empresa_id}/sendPDF', 'V1\DocumentoAPIController@sendPDF')->name('tickets.sendPDF');
         Route::get('tickets/{id}/empresa/{empresa_id}/pdf', 'V1\DocumentoAPIController@pdf')->name('tickets.pdf');

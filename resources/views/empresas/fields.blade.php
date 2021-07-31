@@ -36,6 +36,16 @@
     {!! Form::text('numeroResolucionBoleta', $company->numeroResolucionBoleta, ['class' => 'appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500']) !!}
 </div>
 
+<div class="my-2 px-2 w-full overflow-hidden sm:w-full md:w-full lg:w-full xl:w-full">
+    {!! Form::label('contactoSii', 'Email contacto sii:') !!}
+    {!! Form::text('contactoSii', $company->contactoSii, ['class' => 'appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500']) !!}
+</div>
+
+<div class="my-2 px-2 w-full overflow-hidden sm:w-full md:w-full lg:w-full xl:w-full">
+    {!! Form::label('contactoEmpresas', 'Email contacto empresas:') !!}
+    {!! Form::text('contactoEmpresas', $company->contactoEmpresas, ['class' => 'appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500']) !!}
+</div>
+
 <!-- Submit Field -->
 <div class="w-full px-2 mt-5 align-right flex">
     <div class="md:w-8/12 sm:w-full lg:w-9/12 xl:w-9/12">
