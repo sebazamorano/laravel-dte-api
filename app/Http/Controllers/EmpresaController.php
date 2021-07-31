@@ -47,17 +47,20 @@ class EmpresaController extends Controller
             $input = $request->validated();
             $sii = new Sii();
 
+            $nombre_archivo_temporal = uniqid().'.csv';
+            $path_archivo_temporal =  Storage::path($nombre_archivo_temporal);
+
             $p12 = CertificadoEmpresa::parsearCertificado($request);
             $cookieJar = CertificadoEmpresa::obtenerCookieJarDesdeCertificadoTemporal($request, $p12);
-            $csv_tmp = Storage::put(uniqid() . '.csv', '');
-            $response = $sii->downloadCompanyData($input['identity_card'], Storage::path($csv_tmp), $cookieJar);
+            $csv_tmp = Storage::put($nombre_archivo_temporal, '');
+            $response = $sii->downloadCompanyData($input['identity_card'], $path_archivo_temporal, $cookieJar);
 
             if($response === false){
-                request()->session()->flash('error-message', ['Error al intentar crear empresa, intente más tarde!']);
+                request()->session()->flash('error-message', ['Error al intentar crear empresa [error conexión al sii], intente más tarde!']);
                 return redirect(route('companies.index'));
             }
 
-            $company_data = Sii::transformCsvCompanyDataToArray(Storage::path($csv_tmp));
+            $company_data = Sii::transformCsvCompanyDataToArray($path_archivo_temporal);
             Storage::delete($csv_tmp);
 
             $empresa = Empresa::crearEmpresaDesdeSiiData($company_data);
@@ -65,7 +68,7 @@ class EmpresaController extends Controller
 
             if($certificado === false){
                 DB::rollBack();
-                request()->session()->flash('error-message', ['Error al intentar crear empresa, intente más tarde!']);
+                request()->session()->flash('error-message', ['Error al intentar crear empresa [problemas en el certificado], intente más tarde!']);
                 return redirect(route('companies.index'));
             }
 
@@ -75,7 +78,7 @@ class EmpresaController extends Controller
             DB::commit();
         } catch (\Throwable $e) {
             DB::rollBack();
-            request()->session()->flash('error-message', ['Error al intentar crear empresa, intente más tarde!', $e->getMessage() . $e->getCode() . $e->getFile() . $e->getLine()]);
+            request()->session()->flash('error-message', ['Error al intentar crear empresa, intente más tarde[]!', $e->getMessage() . $e->getCode() . $e->getFile() . $e->getLine()]);
             return redirect(route('companies.index'));
         }
 
