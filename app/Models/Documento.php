@@ -1031,7 +1031,7 @@ class Documento extends Model
         return false;
     }
 
-    public function consultarEstadoSii($token = false)
+    public function consultarEstadoSii($token = false, $return = false)
     {
         /* @var CertificadoEmpresa $certificado  */
         $certificado = $this->empresa->certificados()->where('enUso', 1)->first();
@@ -1069,6 +1069,10 @@ class Documento extends Model
                 $this->estadoSii = $data->codigo;
                 $this->glosaErrSii = $data->descripcion;
                 $this->save();
+            }
+
+            if($return){
+                return $data;
             }
 
             Log::info('Documento con ID: ' . $this->id . ' actualizado con estado:' . $this->glosaEstadoSii);

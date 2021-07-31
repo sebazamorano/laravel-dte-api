@@ -365,4 +365,13 @@ class DocumentoAPIController extends AppBaseController
             ));
         }
     }
+
+    public function consultarEstadoSii($empresa_id, Documento $documento)
+    {
+        if($empresa_id !== $documento->empresa_id){
+            return $this->sendError('Documento no encontrado');
+        }
+        
+        return $this->sendResponse(['data' => $documento->consultarEstadoSii(null, true)], '');
+    }
 }
