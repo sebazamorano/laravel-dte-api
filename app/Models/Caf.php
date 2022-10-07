@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Spiritix\LadaCache\Database\LadaCacheTrait;
+
 
 /**
  * Class Caf.
@@ -32,7 +32,7 @@ use Spiritix\LadaCache\Database\LadaCacheTrait;
  */
 class Caf extends Model
 {
-    use SoftDeletes, LadaCacheTrait;
+    use SoftDeletes;
 
     public $table = 'cafs';
     protected $with = ['archivo', 'tipo_documento'];

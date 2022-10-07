@@ -4,11 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Spiritix\LadaCache\Database\LadaCacheTrait;
+
 
 class RoleTenantUserPivot extends Pivot
 {
-    use LadaCacheTrait;
     protected $table = 'role_tenant_user';
 
     protected $fillable = ['role_id', 'tenant_id', 'user_id'];

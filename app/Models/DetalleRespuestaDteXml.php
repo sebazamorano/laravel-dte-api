@@ -6,7 +6,7 @@ use Eloquent as Model;
 use Illuminate\Http\Request;
 use App\Models\SII\AcceptanceClaim;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spiritix\LadaCache\Database\LadaCacheTrait;
+
 
 /**
  * Class DetalleRespuestaDteXml.
@@ -30,7 +30,7 @@ use Spiritix\LadaCache\Database\LadaCacheTrait;
  */
 class DetalleRespuestaDteXml extends Model
 {
-    use SoftDeletes, LadaCacheTrait;
+    use SoftDeletes;
 
     public $table = 'detalles_respuestas_dtes_xmls';
 

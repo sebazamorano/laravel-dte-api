@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spiritix\LadaCache\Database\LadaCacheTrait;
+
 
 /**
  * Class RespuestaDteXml.
@@ -34,7 +34,7 @@ use Spiritix\LadaCache\Database\LadaCacheTrait;
  */
 class RespuestaDteXml extends Model
 {
-    use SoftDeletes, LadaCacheTrait;
+    use SoftDeletes;
 
     protected $xml;
 

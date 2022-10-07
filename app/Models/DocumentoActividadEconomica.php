@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spiritix\LadaCache\Database\LadaCacheTrait;
+
 
 /**
  * Class DocumentoActividadEconomica.
@@ -17,7 +17,7 @@ use Spiritix\LadaCache\Database\LadaCacheTrait;
  */
 class DocumentoActividadEconomica extends Model
 {
-    use SoftDeletes, LadaCacheTrait;
+    use SoftDeletes;
 
     public $table = 'documentos_actividades_economicas';
 

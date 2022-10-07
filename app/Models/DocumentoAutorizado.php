@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spiritix\LadaCache\Database\LadaCacheTrait;
+
 
 /**
  * Class DocumentoAutorizado.
@@ -15,7 +15,7 @@ use Spiritix\LadaCache\Database\LadaCacheTrait;
  */
 class DocumentoAutorizado extends Model
 {
-    use SoftDeletes, LadaCacheTrait;
+    use SoftDeletes;
 
     public $table = 'documentos_autorizados';
 

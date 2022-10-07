@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\Sucursal as Channel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spiritix\LadaCache\Database\LadaCacheTrait;
+
 
 /**
  * Class Employee.
@@ -18,7 +18,7 @@ use Spiritix\LadaCache\Database\LadaCacheTrait;
  */
 class Employee extends Model
 {
-    use SoftDeletes, LadaCacheTrait;
+    use SoftDeletes;
 
     public $table = 'employees';
 

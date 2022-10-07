@@ -4,20 +4,18 @@ namespace App\Models;
 
 use App\File;
 use App\Mail\Information;
-use App\Models\SII\EconomicActivity;
 use App\Role;
 use App\Traits\TenantBase;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use App\Exceptions\TenantAlreadyExist;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Contracts\Spatie\Tenant as TenantContract;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Traits\RefreshesPermissionCache;
-use Spiritix\LadaCache\Database\LadaCacheTrait;
+
 
 /**
  * Class Empresa.
@@ -59,7 +57,7 @@ use Spiritix\LadaCache\Database\LadaCacheTrait;
  */
 class Empresa extends Model implements TenantContract
 {
-    use SoftDeletes, LadaCacheTrait, TenantBase, RefreshesPermissionCache;
+    use SoftDeletes, TenantBase, RefreshesPermissionCache;
 
     public $table = 'empresas';
 

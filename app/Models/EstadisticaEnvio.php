@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spiritix\LadaCache\Database\LadaCacheTrait;
+
 
 /**
  * Class EstadisticaEnvio.
@@ -21,7 +21,7 @@ use Spiritix\LadaCache\Database\LadaCacheTrait;
  */
 class EstadisticaEnvio extends Model
 {
-    use SoftDeletes, LadaCacheTrait;
+    use SoftDeletes;
 
     public $table = 'estadisticas_envios';
 

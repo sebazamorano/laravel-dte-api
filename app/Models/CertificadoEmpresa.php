@@ -7,7 +7,7 @@ use App\File as File;
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
-use Spiritix\LadaCache\Database\LadaCacheTrait;
+
 
 /**
  * Class CertificadoEmpresa.
@@ -29,7 +29,7 @@ use Spiritix\LadaCache\Database\LadaCacheTrait;
  */
 class CertificadoEmpresa extends Model
 {
-    use SoftDeletes, LadaCacheTrait;
+    use SoftDeletes;
 
     public $table = 'certificados_empresas';
 

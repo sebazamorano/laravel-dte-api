@@ -18,7 +18,7 @@ use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use ADICHILE\DTEFACIL\SII\OBJECT_AND_XML\ObjectAndXML;
-use Spiritix\LadaCache\Database\LadaCacheTrait;
+
 
 /**
  * Class Documento.
@@ -78,7 +78,7 @@ use Spiritix\LadaCache\Database\LadaCacheTrait;
  */
 class Documento extends Model
 {
-    use SoftDeletes, LadaCacheTrait;
+    use SoftDeletes;
 
     public $table = 'documentos';
 

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spiritix\LadaCache\Database\LadaCacheTrait;
+
 
 /**
  * Class EnvioDte.
@@ -49,7 +49,7 @@ use Spiritix\LadaCache\Database\LadaCacheTrait;
  */
 class EnvioDte extends Model
 {
-    use SoftDeletes, LadaCacheTrait;
+    use SoftDeletes;
 
     public $table = 'envios_dtes';
 
@@ -320,6 +320,11 @@ class EnvioDte extends Model
         return $this->belongsToMany(\App\Models\Email::class);
     }
 
+    public function revisiones()
+    {
+        return $this->hasMany(EnvioDteRevision::class);
+    }
+
     public function crearCorreoCertificacion()
     {
         $email_address = config('dte.certification_email');
@@ -449,24 +454,27 @@ class EnvioDte extends Model
         }else{
 
             $rechazados_reparos = 0;
-            foreach($data->estadistica as $estadistica){
-                $resultado_envio = new EstadisticaEnvio();
-                $resultado_envio->envio_dte_id = $this->id;
-                $resultado_envio->empresa_id = $this->empresa_id;
-                $resultado_envio->tipoDoc = $estadistica->tipo;
-                $resultado_envio->informado = $estadistica->informados;
-                $resultado_envio->acepta = $estadistica->aceptados;
-                $resultado_envio->rechazo = $estadistica->rechazados;
-                $resultado_envio->reparo = $estadistica->reparos;
-                $resultado_envio->save();
+            if(isset($data->estadistica)){
+                foreach($data->estadistica as $estadistica){
+                    $resultado_envio = new EstadisticaEnvio();
+                    $resultado_envio->envio_dte_id = $this->id;
+                    $resultado_envio->empresa_id = $this->empresa_id;
+                    $resultado_envio->tipoDoc = $estadistica->tipo;
+                    $resultado_envio->informado = $estadistica->informados;
+                    $resultado_envio->acepta = $estadistica->aceptados;
+                    $resultado_envio->rechazo = $estadistica->rechazados;
+                    $resultado_envio->reparo = $estadistica->reparos;
+                    $resultado_envio->save();
 
-                if($estadistica->reparos > 0 || $estadistica->rechazados > 0){
-                    $rechazados_reparos++;
+                    if($estadistica->reparos > 0 || $estadistica->rechazados > 0){
+                        $rechazados_reparos++;
+                    }
                 }
             }
 
+
             $folios_array = [];
-            if($rechazados_reparos > 0){
+            if($rechazados_reparos > 0 || isset($data->detalle_rep_rech)){
                 foreach($data->detalle_rep_rech as $detalle){
                     $revision = new EnvioDteRevision();
                     $revision->envio_dte_id = $this->id;
@@ -514,9 +522,13 @@ class EnvioDte extends Model
                     $dte_enviar->glosaErrSii = 'Documento Recibido por el SII. Recibido con Reparos [API]';
                 }
 
-                if ($arregloEnviar['Estado'] == 'RCH') {
+                if ($arregloEnviar['Estado'] == 'RCH' || $data->estado == "RSC") {
                     $dte_enviar->glosaEstadoSii = 'DTE Rechazado';
                     $dte_enviar->glosaErrSii = 'Documento NO Recibido por el SII. [API]';
+                }
+
+                if($data->estado == "RSC"){
+                    $dte_enviar->glosaEstadoSii .= ' [ESQUEMA]';
                 }
 
                 $dte_enviar->update();

@@ -8,7 +8,7 @@ use Freshwork\ChileanBundle\Rut;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spiritix\LadaCache\Database\LadaCacheTrait;
+
 
 /**
  * Class Contribuyente.
@@ -23,7 +23,7 @@ use Spiritix\LadaCache\Database\LadaCacheTrait;
  */
 class Contribuyente extends Model
 {
-    use SoftDeletes, LadaCacheTrait;
+    use SoftDeletes;
 
     public $table = 'contribuyentes';
 

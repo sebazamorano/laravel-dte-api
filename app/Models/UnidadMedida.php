@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spiritix\LadaCache\Database\LadaCacheTrait;
+
 
 /**
  * Class UnidadMedida.
@@ -16,7 +16,7 @@ use Spiritix\LadaCache\Database\LadaCacheTrait;
  */
 class UnidadMedida extends Model
 {
-    use SoftDeletes, LadaCacheTrait;
+    use SoftDeletes;
 
     public $table = 'unidades_medidas';
 

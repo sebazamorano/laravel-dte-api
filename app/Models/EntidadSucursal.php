@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spiritix\LadaCache\Database\LadaCacheTrait;
+
 
 /**
  * Class EntidadSucursal.
@@ -23,7 +23,7 @@ use Spiritix\LadaCache\Database\LadaCacheTrait;
  */
 class EntidadSucursal extends Model
 {
-    use SoftDeletes, LadaCacheTrait;
+    use SoftDeletes;
 
     public $table = 'entidades_sucursales';
 

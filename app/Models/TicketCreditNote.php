@@ -5,7 +5,7 @@ namespace App\Models;
 use Eloquent as Model;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spiritix\LadaCache\Database\LadaCacheTrait;
+
 
 /**
  * Class TicketCreditNote.
@@ -25,7 +25,7 @@ use Spiritix\LadaCache\Database\LadaCacheTrait;
  */
 class TicketCreditNote extends Model
 {
-    use SoftDeletes, LadaCacheTrait;
+    use SoftDeletes;
 
     public $table = 'ticket_credit_notes';
 

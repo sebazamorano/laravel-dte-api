@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spiritix\LadaCache\Database\LadaCacheTrait;
+
 
 /**
  * Class EnvioDteRevision.
@@ -19,7 +19,7 @@ use Spiritix\LadaCache\Database\LadaCacheTrait;
  */
 class EnvioDteRevision extends Model
 {
-    use SoftDeletes, LadaCacheTrait;
+    use SoftDeletes;
 
     public $table = 'envio_dte_revisiones';
 
@@ -54,4 +54,9 @@ class EnvioDteRevision extends Model
         'tipoDte' => 'integer',
         'estado' => 'string|max:100',
     ];
+
+    public function detalle()
+    {
+        return $this->hasMany(EnvioDteRevisionDetalle::class);
+    }
 }

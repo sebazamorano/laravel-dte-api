@@ -5,11 +5,10 @@ namespace App;
 use App\Models\Empresa;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Intervention\Image\Facades\Image;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Spiritix\LadaCache\Database\LadaCacheTrait;
+
 
 /**
  * Class File.
@@ -25,7 +24,6 @@ use Spiritix\LadaCache\Database\LadaCacheTrait;
  */
 class File extends Model
 {
-    use LadaCacheTrait;
     /**
      * Define the columns which can be mass assigned.
      *
@@ -108,7 +106,7 @@ class File extends Model
         }else{
             $empresa = $company;
         }
-        
+
         $nombreArchivo = $request->$nombreInput->getClientOriginalName();
 
         Storage::cloud()->put("{$empresa->rut}/{$type}/".$path, file_get_contents($file), 'private');
