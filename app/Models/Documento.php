@@ -419,7 +419,7 @@ class Documento extends Model
                     $detalle_xml = new \ADICHILE\DTEFACIL\SII\BOLETAS\DTE\Detalle();
                 }
 
-                if (isset($detalle->TpoCodigo) || isset($detalle->VlrCodigo)) {
+                if (isset($detalle->TpoCodigo) && isset($detalle->VlrCodigo)) {
                     $detalle_xml->setCdgItem();
                 }
 
@@ -427,7 +427,9 @@ class Documento extends Model
                     $set = 'set'.$index;
 
                     if (($index == 'TpoCodigo' || $index == 'VlrCodigo') && ! empty($value) && $value !== null) {
-                        $detalle_xml->getCdgItem()->$set((string) $value);
+                        if (isset($detalle->TpoCodigo) && isset($detalle->VlrCodigo)) {
+                            $detalle_xml->getCdgItem()->$set((string) $value);
+                        }
                     }
 
                     if (method_exists($detalle_xml, $set) && $value !== null) {
@@ -1064,6 +1066,7 @@ class Documento extends Model
                     $this->glosaEstadoSii = 'DTE No Recibido';
                 }else{
                     $this->glosaEstadoSii = 'DTE Recibido';
+                    $this->glosaErrSii = 'Documento Recibido por el SII. Datos Coinciden con los Registrados [API]';
                 }
 
                 $this->estadoSii = $data->codigo;
@@ -1071,11 +1074,11 @@ class Documento extends Model
                 $this->save();
             }
 
+            Log::info('Documento con ID: ' . $this->id . ' actualizado con estado:' . $this->glosaEstadoSii);
+
             if($return){
                 return $data;
             }
-
-            Log::info('Documento con ID: ' . $this->id . ' actualizado con estado:' . $this->glosaEstadoSii);
         }
     }
 

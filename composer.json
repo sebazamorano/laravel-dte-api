@@ -25,17 +25,17 @@
         "freshwork/chilean-bundle": "^2.1",
         "laravel/framework": "^6.0",
         "laravel/passport": "^7.4",
-        "laravel/tinker": "^1.0",
+        "laravel/tinker": "^2.1",
         "laravel/vapor-core": "^2.1",
         "laravel/vapor-ui": "^1.0",
+        "laravelcollective/html": "^6.2",
         "lcobucci/jwt": "3.3.3",
         "league/flysystem-aws-s3-v3": "~1.0",
         "mpdf/mpdf": "^8.0",
         "pusher/pusher-php-server": "~4.0",
         "spatie/laravel-permission": "^3.0",
         "spiritix/lada-cache": "^4.0",
-        "zbateson/mail-mime-parser": "^1.1",
-        "laravelcollective/html": "^6.2"
+        "zbateson/mail-mime-parser": "^1.1"
     },
     "require-dev": {
         "beyondcode/tinkerwell-helper": "^1.0",
