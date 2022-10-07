@@ -437,7 +437,7 @@ class EnvioDte extends Model
         }
     }
 
-    public function consultarEstadoSii($token = false)
+    public function consultarEstadoSii($token = false, $return = false)
     {
         $siiComponent = new Sii($this->empresa);
 
@@ -543,5 +543,8 @@ class EnvioDte extends Model
 
         $this->save();
 
+        if($return){
+            return $data;
+        }
     }
 }
