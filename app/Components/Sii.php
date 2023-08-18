@@ -62,6 +62,8 @@ class Sii
     const AMBIENTE_CERTIFICACION = 'maullin';
     const RCV_PRODUCCION = 'https://www4.sii.cl/consdcvinternetui/services/data/facadeService/';
     const RCV_CERTIFICACION = 'https://www4c.sii.cl/consdcvinternetui/services/data/facadeService/';
+    const RCV_BOL_PRODUCCION = 'https://www4.sii.cl/complementoscvui/services/data/facadeServiceBoletasDiarias/obtieneListaBoletasMes';
+    const RCV_BOL_CERTIFICACION = 'https://www4c.sii.cl/complementoscvui/services/data/facadeServiceBoletasDiarias/obtieneListaBoletasMes';
     const URL_SOLICITA_FOLIOS_PRODUCCION = "https://palena.sii.cl/cvc_cgi/dte/of_solicita_folios";
     const URL_SOLICITA_FOLIOS_CERTIFICACION = "https://maullin.sii.cl/cvc_cgi/dte/of_solicita_folios";
     const URL_SOLICITA_FOLIOS_DCTO_PRODUCCION = "https://palena.sii.cl/cvc_cgi/dte/of_solicita_folios_dcto";
@@ -1235,6 +1237,81 @@ class Sii
         return $uniq_id;
     }
 
+    public function obtenerListadoBoletas($data, $type = 'CERT')
+    {
+
+        if($type == 'CERT'){
+            $tokenSII = false;
+            for ($i = 0; $i < $this->reintentos; $i++) {
+                $tokenSII = $this->obtenerToken();
+                if ($tokenSII !== false) {
+                    break;
+                }
+            }
+
+            if ($tokenSII === false) {
+                return false;
+            }
+        }else{
+            $cookies = $this->obtenerCookiesNoCERT($this->empresa->rut, $this->empresa->passwordSii);
+            $tokenSII = $cookies->getCookieByName('TOKEN')->getValue();
+        }
+
+
+        $pRutEmpresa = substr($this->empresa->rut, 0, -2);
+        $pDigEmpresa = substr($this->empresa->rut, -1);
+
+        $url = ($this->ambiente == self::AMBIENTE_PRODUCCION) ? self::RCV_BOL_PRODUCCION : self::RCV_BOL_CERTIFICACION;
+        $uuid = uniqid();
+        $pTipoDocumento = $data['pTipoDocumento'];
+        $pTributario = $data['pTributario'];
+        $client = new \GuzzleHttp\Client();
+        $array =
+            [
+                'data'=> [
+                    'dv' => $pDigEmpresa,
+                    'tipoDocumento'=> $pTipoDocumento,
+                    'periodo' => $pTributario,
+                    'rut' => $pRutEmpresa,
+                ],
+                'metaData' => [
+                    'conversationId' => $tokenSII,
+                    'namespace' => "cl.sii.sdi.lob.diii.dcv.data.impl.boletasdiarias.FacadeSettingApplicationService/obtieneListaBoletasMes",
+                    'page' => null,
+                    'transactionId' => $uuid,
+                ],
+            ];
+        try {
+            $request = $client->post($url,
+                [
+                    'body' => json_encode($array),
+                    'headers' => [
+                        'User-Agent' => self::USER_AGENT,
+                        'Accept' => 'application/json, text/plain, */*',
+                        'Accept-Encoding' => 'gzip, deflate, br',
+                        'Accept-Language' => 'es-ES,es;q=0.9',
+                        'Cookie' => "TOKEN=$tokenSII;",
+                        'Content-Type' => 'application/json',
+                    ],
+                    'curl' => [
+                        CURLOPT_RETURNTRANSFER => 'true',
+                        CURLOPT_PORT => 443,
+                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_0,
+                        CURLOPT_SSL_VERIFYPEER => false,
+                        CURLOPT_SSL_VERIFYHOST => false,
+                    ],
+                ]);
+
+            if ($request->getStatusCode() != 500) {
+                return $request->getBody()->getContents();
+            } else {
+                return false;
+            }
+        } catch (\Throwable $e) {
+            echo $e->getMessage();
+        }
+    }
+
     public function getRCVDetail($data, $type = 'CERT')
     {
 
@@ -1251,7 +1328,7 @@ class Sii
                 return false;
             }
         }else{
-            $cookies = $this->obtenerCookiesNoCERT($this->empresa->rut, '');
+            $cookies = $this->obtenerCookiesNoCERT($this->empresa->rut, $this->empresa->passwordSii);
             $tokenSII = $cookies->getCookieByName('TOKEN')->getValue();
         }
 

@@ -70,7 +70,6 @@ class File extends Model
     public function uploadFileFromContent(Empresa $empresa, $content, $nombreArchivo, $mimeType, $fileSize = 0, $type = 'main')
     {
         $path = uniqid().'_'.$nombreArchivo;
-        // upload image to S3
         Storage::cloud()->put("{$empresa->rut}/{$type}/".$path, $content, 'private');
 
         // make image entry to DB

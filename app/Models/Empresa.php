@@ -15,6 +15,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Traits\RefreshesPermissionCache;
+use Illuminate\Support\Facades\Crypt;
 
 
 /**
@@ -44,6 +45,7 @@ use Spatie\Permission\Traits\RefreshesPermissionCache;
  * @property int esReceptor
  * @property int reglasNegocio
  * @property int logo_id
+ * @property string passwordSii
  * @property File logo
  * @property Comuna comuna
  * @property-read Provincia provincia
@@ -83,6 +85,7 @@ class Empresa extends Model implements TenantContract
         'esEmisor',
         'esReceptor',
         'reglasNegocio',
+        'passwordSii'
     ];
 
     /**
@@ -112,6 +115,7 @@ class Empresa extends Model implements TenantContract
         'esEmisor' => 'integer',
         'esReceptor' => 'integer',
         'reglasNegocio' => 'integer',
+        'passwordSii' => 'string'
     ];
 
     /**
@@ -151,6 +155,36 @@ class Empresa extends Model implements TenantContract
         'updated_at' => 'Fecha actualización',
         'deleted_at' => 'Fecha eliminación',
     ];
+
+    /**
+     * Get the company's sii password
+     *
+     * @param string|null $value
+     * @return string|null
+     */
+    public function getPasswordSiiAttribute(?string $value): ?string
+    {
+        if(!empty($value)) {
+            return Crypt::decryptString($value);
+        }
+
+        return null;
+    }
+
+    /**
+     * Set the user's first name.
+     *
+     * @param string|null $value
+     * @return void
+     */
+    public function setPasswordSiiAttribute(?string $value)
+    {
+        if(!empty($value)){
+            $this->attributes['passwordSii'] = Crypt::encryptString($value);
+        }else{
+            $this->attributes['passwordSii'] = null;
+        }
+    }
 
     /**
      * The data of the comuna referenced to the company.
@@ -268,7 +302,7 @@ class Empresa extends Model implements TenantContract
         $p12worked = openssl_pkcs12_read(file_get_contents($request->file('original')->getPathname()), $p12, $request->password);
 
         if (! self::contrasenaCertificadoEsValida($p12worked)) {
-            if($request->route()->getName() == 'certificadosDigitales.upload'){
+            if(in_array($request->route()->getName(), ['certificadosDigitales.upload', 'companies.store'])){
                 request()->session()->flash('error-message', ['Error en la clave del certificado digital']);
                 return false;
             }else{

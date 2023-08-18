@@ -76,5 +76,6 @@ class ActualizarContribuyentes extends Command
         $this->info('Insertando registros porfavor espere...');
         Contribuyente::actualizarRegistros($contribuyentes);
         $this->info('Registros insertados');
+        Storage::delete('intercambio.csv');
     }
 }
