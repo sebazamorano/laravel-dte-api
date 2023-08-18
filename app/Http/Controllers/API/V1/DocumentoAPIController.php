@@ -20,6 +20,7 @@ use App\Http\Request\API\CreateBoletaAPIRequest;
 use App\Http\Request\API\CreateDocumentoAPIRequest;
 use App\Http\Request\API\UpdateDocumentoAPIRequest;
 use App\Http\Resources\Documento as DocumentoResource;
+use App\Models\EnvioDte;
 
 /**
  * Class DocumentoController.
@@ -366,12 +367,40 @@ class DocumentoAPIController extends AppBaseController
         }
     }
 
-    public function consultarEstadoSii($empresa_id, Documento $documento)
+    public function consultarEstadoEnvioSii(Documento $documento, $empresa_id)
+    {
+        if($empresa_id != $documento->empresa_id){
+            return $this->sendError('Documento no encontrado');
+        }
+
+        /* @var EnvioDte $envio */
+        $envio = $documento->envios()->latest()->first();
+        $data = $envio->consultarEstadoSii(false, true, false);
+        return $this->sendResponse(['data' => $data], '');
+    }
+
+    public function consultarEstadoSii(Documento $documento, $empresa_id)
     {
         if($empresa_id !== $documento->empresa_id){
             return $this->sendError('Documento no encontrado');
         }
-        
-        return $this->sendResponse(['data' => $documento->consultarEstadoSii(null, true)], '');
+
+        $data = $documento->consultarEstadoSii(false, true, true);
+
+        return $this->sendResponse(['data' => $data], '');
+    }
+
+    public function enviarAlSii(APIRequest $request, Documento $documento, $empresa_id)
+    {
+        if($empresa_id != $documento->empresa_id){
+            return $this->sendError('Documento no encontrado');
+        }
+
+        if($documento->glosaEstadoSii !== 'DTE Recibido'){
+            ProcesarEnvioDte::dispatch($documento->id);
+            return $this->sendResponse(['data' => null], 'Documento enviado a cola de envios');
+        }else{
+            return $this->sendError('El DTE no sera enviado, ya tiene estado "DTE Recibido"');
+        }
     }
 }

@@ -60,14 +60,14 @@ class ProcesarEnvioDteMultiple implements ShouldQueue
             $file = $envio->subirXmlS3($xml_string);
             $envio->archivos()->attach($file->id);
 
-            if($this->certificacion == false){
+            if(!$this->certificacion){
                 $envio->subirAllSii();
                 \App\Models\Documento::whereIn('id', $this->ids)->update(['glosaEstadoSii' => 'DTE Enviado Multiple']);
             }else{
                 \App\Models\Documento::whereIn('id', $this->ids)->update(['glosaEstadoSii' => 'CERTIFICACION']);
             }
 
-            if($boleta == 1 && $this->certificacion == false){
+            if($boleta == 1 && !$this->certificacion){
                 ConsultarEstadoEnvioSii::dispatch($envio->id)->delay(Carbon::now()->addMinutes(1));
             }
 

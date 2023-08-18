@@ -1033,13 +1033,13 @@ class Documento extends Model
         return false;
     }
 
-    public function consultarEstadoSii($token = false, $return = false)
+    public function consultarEstadoSii($token = false, $force = false, $return = false)
     {
         /* @var CertificadoEmpresa $certificado  */
         $certificado = $this->empresa->certificados()->where('enUso', 1)->first();
         $siiComponent = new Sii($this->empresa);
 
-        if($this->glosaEstadoSii != 'DTE Recibido'){
+        if($this->glosaEstadoSii != 'DTE Recibido' || $force){
             $documento = [
                 'rut_emisor' => $this->emisor->RUTEmisor,
                 'rut_receptor' => $this->receptor->RUTRecep,
